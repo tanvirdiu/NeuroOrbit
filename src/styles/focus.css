@@ -1,0 +1,431 @@
+:root {
+    --focus-bg: #f4f7fb;
+    --focus-card: rgba(255, 255, 255, .82);
+    --focus-border: rgba(255, 255, 255, .55);
+    --focus-text: #0f172a;
+    --focus-muted: #64748b;
+    --focus-input: rgba(15, 23, 42, .04);
+    --focus-hover: rgba(255, 255, 255, .55);
+}
+
+
+/* DARK MODE */
+
+.dark {
+    --focus-bg: #020817;
+    --focus-card: rgba(15, 23, 42, .72);
+    --focus-border: rgba(255, 255, 255, .05);
+    --focus-text: #f8fafc;
+    --focus-muted: #94a3b8;
+    --focus-input: rgba(255, 255, 255, .05);
+    --focus-hover: rgba(255, 255, 255, .03);
+}
+
+
+/* =========================
+   FOCUS PAGE
+========================= */
+
+.focus-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    width: 100%;
+    padding-bottom: 40px;
+    overflow: hidden;
+    background: var(--focus-bg);
+    min-height: 100vh;
+    transition: .3s ease;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.focus-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 40px;
+    border-radius: 34px;
+    background: radial-gradient( circle at top left, rgba(0, 217, 255, .08), transparent 28%), radial-gradient( circle at bottom right, rgba(124, 77, 255, .08), transparent 28%), var(--focus-card);
+    border: 1px solid var(--focus-border);
+    backdrop-filter: blur(18px);
+}
+
+.focus-header h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    color: var(--focus-text);
+    margin-bottom: 18px;
+    font-weight: 700;
+}
+
+.focus-header p {
+    max-width: 700px;
+    color: var(--focus-muted);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+
+/* STATUS */
+
+.focus-status {
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: rgba(0, 217, 255, .10);
+    border: 1px solid rgba(0, 217, 255, .18);
+    color: #00cfff;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.focus-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(280px, .55fr);
+    gap: 24px;
+    width: 100%;
+}
+
+
+/* =========================
+   TIMER CARD
+========================= */
+
+.focus-timer-card {
+    padding: 34px;
+    border-radius: 30px;
+    background: var(--focus-card);
+    border: 1px solid var(--focus-border);
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.focus-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.focus-top-bar h2 {
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    color: var(--focus-text);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.focus-top-bar p {
+    color: var(--focus-muted);
+    font-size: .96rem;
+    line-height: 1.7;
+}
+
+
+/* LIVE */
+
+.live-badge {
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, .12);
+    color: #22c55e;
+    font-weight: 600;
+}
+
+
+/* =========================
+   TIMER PRESETS
+========================= */
+
+.timer-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 30px;
+}
+
+.preset-btn {
+    min-width: 100px;
+    height: 48px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    padding: 0 22px;
+    background: var(--focus-input);
+    color: var(--focus-text);
+    font-size: .95rem;
+    font-weight: 600;
+    transition: .3s ease;
+}
+
+.preset-btn:hover {
+    transform: translateY(-2px);
+    background: var(--focus-hover);
+}
+
+.preset-btn.active {
+    background: linear-gradient( 135deg, #00cfff, #6d5cff);
+    color: white;
+}
+
+
+/* =========================
+   CUSTOM INPUTS
+========================= */
+
+.custom-timer-box {
+    margin-bottom: 40px;
+}
+
+.custom-timer-box label {
+    display: block;
+    margin-bottom: 16px;
+    color: var(--focus-muted);
+    font-size: .95rem;
+    font-weight: 500;
+}
+
+.custom-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 14px;
+}
+
+.custom-inputs input {
+    width: 100%;
+    height: 56px;
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    padding: 0 18px;
+    background: var(--focus-input);
+    color: var(--focus-text);
+    font-size: 1rem;
+}
+
+.custom-inputs input::placeholder {
+    color: var(--focus-muted);
+}
+
+.custom-inputs button {
+    height: 56px;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    padding: 0 28px;
+    background: linear-gradient( 135deg, #00cfff, #6d5cff);
+    color: white;
+    font-weight: 600;
+    transition: .3s ease;
+}
+
+.custom-inputs button:hover {
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   TIMER RING
+========================= */
+
+.timer-ring {
+    width: min(320px, 85vw);
+    height: min(320px, 85vw);
+    margin: 10px auto 40px;
+    border-radius: 50%;
+    background: conic-gradient( from 180deg, #00cfff 0deg, #6d5cff 290deg, rgba(255, 255, 255, .08) 290deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 40px rgba(0, 217, 255, .12);
+}
+
+.timer-ring::before {
+    content: '';
+    position: absolute;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    background: var(--focus-card);
+    backdrop-filter: blur(14px);
+}
+
+.timer-ring-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.timer-ring-inner h1 {
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    color: var(--focus-text);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.timer-ring-inner p {
+    color: var(--focus-muted);
+    font-size: 1rem;
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.focus-controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+.focus-btn {
+    width: 74px;
+    height: 74px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    transition: .3s ease;
+}
+
+.focus-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+.focus-btn.play {
+    background: linear-gradient( 135deg, #00cfff, #3b82f6);
+}
+
+.focus-btn.pause {
+    background: linear-gradient( 135deg, #7c3aed, #6d5cff);
+}
+
+.focus-btn.reset {
+    background: linear-gradient( 135deg, #ff4d4d, #ff6b6b);
+}
+
+
+/* =========================
+   SIDE PANEL
+========================= */
+
+.focus-side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.focus-mini-card {
+    padding: 26px;
+    border-radius: 28px;
+    background: var(--focus-card);
+    border: 1px solid var(--focus-border);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    backdrop-filter: blur(18px);
+}
+
+.focus-mini-card svg {
+    font-size: 2rem;
+    color: #00cfff;
+}
+
+.focus-mini-card h3 {
+    color: var(--focus-muted);
+    font-size: .95rem;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.focus-mini-card h1 {
+    font-size: 2.5rem;
+    color: var(--focus-text);
+    font-weight: 700;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px) {
+    .focus-grid {
+        grid-template-columns: 1fr;
+    }
+    .focus-side-panel {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+}
+
+@media(max-width:768px) {
+    .focus-page {
+        gap: 20px;
+    }
+    .focus-header {
+        flex-direction: column;
+        padding: 28px;
+    }
+    .focus-status {
+        width: 100%;
+        text-align: center;
+    }
+    .focus-timer-card {
+        padding: 24px;
+    }
+    .focus-top-bar {
+        flex-direction: column;
+    }
+    .custom-inputs {
+        grid-template-columns: 1fr;
+    }
+    .preset-btn {
+        flex: 1;
+    }
+    .focus-btn {
+        width: 64px;
+        height: 64px;
+    }
+    .focus-mini-card h1 {
+        font-size: 2rem;
+    }
+}
+
+@media(max-width:500px) {
+    .focus-header h1 {
+        font-size: 2.2rem;
+    }
+    .timer-ring {
+        width: 240px;
+        height: 240px;
+    }
+    .timer-ring-inner h1 {
+        font-size: 2.8rem;
+    }
+    .focus-mini-card {
+        padding: 22px;
+    }
+}

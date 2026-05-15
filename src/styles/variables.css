@@ -1,0 +1,20 @@
+:root {
+    --bg-primary: #0b1120;
+    --bg-secondary: #131c31;
+    --card-bg: rgba(255, 255, 255, .06);
+    --border-color: rgba(255, 255, 255, .08);
+    --text-primary: #ffffff;
+    --text-secondary: #9ca3af;
+    --cyan: #00d9ff;
+    --violet: #7c4dff;
+    --transition: .3s;
+}
+
+.light {
+    --bg-primary: #f4f7fb;
+    --bg-secondary: #ffffff;
+    --card-bg: rgba(255, 255, 255, .9);
+    --border-color: rgba(0, 0, 0, .08);
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+}
