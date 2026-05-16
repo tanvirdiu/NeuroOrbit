@@ -1,37 +1,80 @@
+import {
+  useNavigate
+}
+from 'react-router-dom'
+
+
+
 function Dashboard() {
+
+
+
+  /* ================= NAVIGATE ================= */
+
+  const navigate =
+  useNavigate()
+
+
+
+  /* ================= GREETING ================= */
 
   const hour =
   new Date().getHours()
 
-  const greeting =
-  hour < 12
-  ? 'Good Morning'
-  : hour < 18
-  ? 'Good Afternoon'
-  : 'Good Evening'
 
+
+  const greeting =
+
+  hour < 12
+
+  ?
+
+  'Good Morning'
+
+  :
+
+  hour < 18
+
+  ?
+
+  'Good Afternoon'
+
+  :
+
+  'Good Evening'
+
+
+
+  /* ================= ACTIVITIES ================= */
 
   const activities = [
 
     {
       title:'Completed Deep Focus Session',
+
       time:'2 Hours • 10 Min',
+
       icon:'⚡'
     },
 
     {
       title:'Finished AI Assignment',
+
       time:'Machine Learning Module',
+
       icon:'📘'
     },
 
     {
       title:'Productivity Increased',
+
       time:'+12% This Week',
+
       icon:'📈'
     }
 
   ]
+
 
 
   return (
@@ -39,12 +82,15 @@ function Dashboard() {
     <div className="dashboard-page">
 
 
-      {/* HERO */}
+
+      {/* ================= HERO ================= */}
 
       <section className="dashboard-hero glass-card">
 
 
+
         <div className="hero-content">
+
 
 
           <span className="hero-badge">
@@ -54,9 +100,11 @@ function Dashboard() {
           </span>
 
 
+
           <h1>
 
             {greeting},
+
             <span>
 
               Tanvir
@@ -64,6 +112,7 @@ function Dashboard() {
             </span>
 
           </h1>
+
 
 
           <p>
@@ -76,18 +125,35 @@ function Dashboard() {
 
 
 
-          {/* HERO BUTTONS */}
+          {/* ================= HERO BUTTONS ================= */}
 
           <div className="hero-actions">
 
-            <button className="hero-btn primary">
+
+
+            <button
+
+              className="hero-btn primary"
+
+              onClick={() =>
+                navigate('/focus')
+              }
+            >
 
               Start Focus
 
             </button>
 
 
-            <button className="hero-btn secondary">
+
+            <button
+
+              className="hero-btn secondary"
+
+              onClick={() =>
+                navigate('/analysis')
+              }
+            >
 
               View Analytics
 
@@ -99,15 +165,18 @@ function Dashboard() {
 
 
 
-        {/* AI CARD */}
+        {/* ================= AI CARD ================= */}
 
         <div className="ai-card">
+
+
 
           <h3>
 
             🤖 AI Suggestion
 
           </h3>
+
 
 
           <p>
@@ -119,7 +188,13 @@ function Dashboard() {
           </p>
 
 
-          <button>
+
+          <button
+
+            onClick={() =>
+              navigate('/insights')
+            }
+          >
 
             Generate Study Plan
 
@@ -128,20 +203,26 @@ function Dashboard() {
         </div>
 
 
+
         <div className="hero-glow" />
 
       </section>
 
 
 
-      {/* STATS */}
+      {/* ================= STATS ================= */}
 
       <section className="dashboard-grid">
 
 
+
         <div className="dashboard-card glass-card glow-blue">
 
+
+
           <div className="card-top">
+
+
 
             <div>
 
@@ -151,6 +232,8 @@ function Dashboard() {
 
               </h3>
 
+
+
               <h1>
 
                 5.4h
@@ -158,6 +241,7 @@ function Dashboard() {
               </h1>
 
             </div>
+
 
 
             <div className="card-icon blue">
@@ -169,7 +253,10 @@ function Dashboard() {
           </div>
 
 
+
           <div className="progress-wrapper">
+
+
 
             <div className="progress-bar">
 
@@ -181,6 +268,7 @@ function Dashboard() {
               />
 
             </div>
+
 
 
             <span>
@@ -197,7 +285,11 @@ function Dashboard() {
 
         <div className="dashboard-card glass-card glow-violet">
 
+
+
           <div className="card-top">
+
+
 
             <div>
 
@@ -207,6 +299,8 @@ function Dashboard() {
 
               </h3>
 
+
+
               <h1>
 
                 92%
@@ -214,6 +308,7 @@ function Dashboard() {
               </h1>
 
             </div>
+
 
 
             <div className="card-icon violet">
@@ -225,7 +320,10 @@ function Dashboard() {
           </div>
 
 
+
           <div className="progress-wrapper">
+
+
 
             <div className="progress-bar">
 
@@ -237,6 +335,7 @@ function Dashboard() {
               />
 
             </div>
+
 
 
             <span>
@@ -253,7 +352,11 @@ function Dashboard() {
 
         <div className="dashboard-card glass-card glow-blue">
 
+
+
           <div className="card-top">
+
+
 
             <div>
 
@@ -262,6 +365,8 @@ function Dashboard() {
                 Focus Streak
 
               </h3>
+
+
 
               <h1>
 
@@ -272,6 +377,7 @@ function Dashboard() {
             </div>
 
 
+
             <div className="card-icon blue">
 
               🔥
@@ -279,6 +385,7 @@ function Dashboard() {
             </div>
 
           </div>
+
 
 
           <p className="card-desc">
@@ -294,7 +401,11 @@ function Dashboard() {
 
         <div className="dashboard-card glass-card glow-violet">
 
+
+
           <div className="card-top">
+
+
 
             <div>
 
@@ -303,6 +414,8 @@ function Dashboard() {
                 Pending Tasks
 
               </h3>
+
+
 
               <h1>
 
@@ -313,6 +426,7 @@ function Dashboard() {
             </div>
 
 
+
             <div className="card-icon violet">
 
               📋
@@ -320,6 +434,7 @@ function Dashboard() {
             </div>
 
           </div>
+
 
 
           <p className="card-desc">
@@ -335,175 +450,29 @@ function Dashboard() {
 
 
 
-      {/* MIDDLE GRID */}
-
-      <section className="middle-grid">
-
-
-        {/* FOCUS TIMER */}
-
-        <div className="focus-widget glass-card">
-
-          <div className="section-header">
-
-            <h2>
-
-              Focus Timer
-
-            </h2>
-
-          </div>
-
-
-          <div className="timer-circle">
-
-            <h1>
-
-              25:00
-
-            </h1>
-
-            <p>
-
-              Deep Focus Session
-
-            </p>
-
-          </div>
-
-
-          <div className="timer-actions">
-
-            <button>
-
-              Start
-
-            </button>
-
-            <button>
-
-              Pause
-
-            </button>
-
-            <button>
-
-              Reset
-
-            </button>
-
-          </div>
-
-        </div>
-
-
-
-        {/* MUSIC */}
-
-        <div className="music-widget glass-card">
-
-          <div className="section-header">
-
-            <h2>
-
-              Focus Sounds
-
-            </h2>
-
-          </div>
-
-
-          <div className="music-list">
-
-            <div className="music-item">
-
-              🌧 Rain Focus
-
-            </div>
-
-            <div className="music-item">
-
-              🎧 Lo-Fi Beats
-
-            </div>
-
-            <div className="music-item">
-
-              🔥 Deep Coding
-
-            </div>
-
-            <div className="music-item">
-
-              🌙 Night Flow
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-
-        {/* BADGES */}
-
-        <div className="badge-widget glass-card">
-
-          <div className="section-header">
-
-            <h2>
-
-              Achievements
-
-            </h2>
-
-          </div>
-
-
-          <div className="badge-list">
-
-            <div className="badge-item">
-
-              🏆 7 Day Streak
-
-            </div>
-
-            <div className="badge-item">
-
-              🚀 Productivity Master
-
-            </div>
-
-            <div className="badge-item">
-
-              ⚡ Deep Focus Pro
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-
-      {/* BOTTOM */}
+      {/* ================= BOTTOM ================= */}
 
       <section className="dashboard-bottom">
 
 
-        {/* ACTIVITY */}
+
+        {/* ================= ACTIVITY ================= */}
 
         <div className="activity-box glass-card">
 
+
+
           <div className="section-header">
+
+
 
             <h2>
 
               Recent Activity
 
             </h2>
+
+
 
             <button>
 
@@ -517,6 +486,8 @@ function Dashboard() {
 
           <div className="activity-list">
 
+
+
             {
               activities.map((item,index)=>(
 
@@ -525,6 +496,8 @@ function Dashboard() {
                   key={index}
                 >
 
+
+
                   <div className="activity-icon">
 
                     {item.icon}
@@ -532,13 +505,18 @@ function Dashboard() {
                   </div>
 
 
+
                   <div className="activity-info">
+
+
 
                     <h4>
 
                       {item.title}
 
                     </h4>
+
+
 
                     <p>
 
@@ -547,6 +525,7 @@ function Dashboard() {
                     </p>
 
                   </div>
+
 
 
                   <span className="activity-status">
@@ -565,9 +544,10 @@ function Dashboard() {
 
 
 
-        {/* SIDE PANEL */}
+        {/* ================= SIDE PANEL ================= */}
 
         <div className="side-panel glass-card">
+
 
 
           <h2>
@@ -577,15 +557,22 @@ function Dashboard() {
           </h2>
 
 
+
           <div className="performance-circle">
 
+
+
             <div className="circle-inner">
+
+
 
               <h1>
 
                 92%
 
               </h1>
+
+
 
               <p>
 
@@ -602,13 +589,18 @@ function Dashboard() {
           <div className="mini-stats">
 
 
+
             <div className="mini-card">
+
+
 
               <span>
 
                 Focus Hours
 
               </span>
+
+
 
               <h3>
 
@@ -622,11 +614,15 @@ function Dashboard() {
 
             <div className="mini-card">
 
+
+
               <span>
 
                 Tasks Done
 
               </span>
+
+
 
               <h3>
 

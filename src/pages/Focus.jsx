@@ -1,7 +1,9 @@
 import {
   useEffect,
+  useRef,
   useState
-} from 'react'
+}
+from 'react'
 
 import {
   FaBrain,
@@ -9,10 +11,32 @@ import {
   FaClock,
   FaPlay,
   FaPause,
-  FaRedoAlt
-} from 'react-icons/fa'
+  FaRedoAlt,
+  FaVolumeUp,
+  FaMusic,
+  FaHeadphones
+}
+from 'react-icons/fa'
+
+import rainSound
+from '../assets/audio/rain.mp3'
+
+import lofiSound
+from '../assets/audio/lofi.mp3'
+
+import codingSound
+from '../assets/audio/coding.mp3'
+
+import nightSound
+from '../assets/audio/night.mp3'
+
+
 
 function Focus() {
+
+
+
+  /* ================= TIMER ================= */
 
   const [minutes,setMinutes] =
   useState(25)
@@ -23,12 +47,88 @@ function Focus() {
   const [isRunning,setIsRunning] =
   useState(false)
 
+
+
+  /* ================= CUSTOM TIMER ================= */
+
   const [customHour,setCustomHour] =
   useState('')
 
   const [customMinute,setCustomMinute] =
   useState('25')
 
+
+
+  /* ================= MUSIC ================= */
+
+  const [currentTrack,setCurrentTrack] =
+  useState(null)
+
+  const [isMusicPlaying,setIsMusicPlaying] =
+  useState(false)
+
+  const [volume,setVolume] =
+  useState(0.5)
+
+
+
+  const audioRef =
+  useRef(null)
+
+
+
+  /* ================= TRACKS ================= */
+
+  const tracks = [
+
+    {
+
+      id:1,
+
+      title:'Rain Focus',
+
+      icon:'🌧',
+
+      audio:rainSound
+    },
+
+    {
+
+      id:2,
+
+      title:'Lo-Fi Beats',
+
+      icon:'🎧',
+
+      audio:lofiSound
+    },
+
+    {
+
+      id:3,
+
+      title:'Deep Coding',
+
+      icon:'🔥',
+
+      audio:codingSound
+    },
+
+    {
+
+      id:4,
+
+      title:'Night Flow',
+
+      icon:'🌙',
+
+      audio:nightSound
+    }
+  ]
+
+
+
+  /* ================= TIMER ================= */
 
   useEffect(()=>{
 
@@ -68,6 +168,23 @@ function Focus() {
   },[isRunning,seconds,minutes])
 
 
+
+  /* ================= AUDIO VOLUME ================= */
+
+  useEffect(()=>{
+
+    if(audioRef.current){
+
+      audioRef.current.volume =
+      volume
+    }
+
+  },[volume])
+
+
+
+  /* ================= PRESET ================= */
+
   const handlePreset = (time)=>{
 
     setMinutes(time)
@@ -78,11 +195,18 @@ function Focus() {
   }
 
 
+
+  /* ================= CUSTOM ================= */
+
   const handleApplyCustom = ()=>{
 
     const totalMinutes =
+
     Number(customHour) * 60 +
+
     Number(customMinute)
+
+
 
     if(totalMinutes > 0){
 
@@ -95,6 +219,9 @@ function Focus() {
   }
 
 
+
+  /* ================= RESET ================= */
+
   const handleReset = ()=>{
 
     setMinutes(25)
@@ -105,12 +232,74 @@ function Focus() {
   }
 
 
+
+  /* ================= FORMAT ================= */
+
   const formatTime = (time)=>{
 
     return time < 10
-    ? `0${time}`
-    : time
+
+    ?
+
+    `0${time}`
+
+    :
+
+    time
   }
+
+
+
+  /* ================= PLAY MUSIC ================= */
+
+  const handleMusic = (track)=>{
+
+    if(
+      currentTrack?.id === track.id
+      &&
+      isMusicPlaying
+    ){
+
+      audioRef.current.pause()
+
+      setIsMusicPlaying(false)
+
+      return
+    }
+
+
+
+    if(audioRef.current){
+
+      audioRef.current.pause()
+    }
+
+
+
+    audioRef.current =
+    new Audio(track.audio)
+
+
+
+    audioRef.current.volume =
+    volume
+
+
+
+    audioRef.current.loop =
+    true
+
+
+
+    audioRef.current.play()
+
+
+
+    setCurrentTrack(track)
+
+    setIsMusicPlaying(true)
+  }
+
 
 
   return (
@@ -118,18 +307,24 @@ function Focus() {
     <div className="focus-page">
 
 
-      {/* HEADER */}
+
+      {/* ================= HEADER ================= */}
 
       <div className="focus-header">
 
 
+
         <div>
+
+
 
           <h1>
 
             Focus Mode 🎯
 
           </h1>
+
+
 
           <p>
 
@@ -143,9 +338,10 @@ function Focus() {
         </div>
 
 
+
         <div className="focus-status">
 
-          Ready To Focus
+          Deep Work Active
 
         </div>
 
@@ -153,25 +349,33 @@ function Focus() {
 
 
 
-      {/* GRID */}
+      {/* ================= GRID ================= */}
 
       <div className="focus-grid">
 
 
-        {/* TIMER */}
+
+        {/* ================= TIMER ================= */}
 
         <div className="focus-timer-card">
 
 
+
           <div className="focus-top-bar">
 
+
+
             <div>
+
+
 
               <h2>
 
                 Smart Focus Timer
 
               </h2>
+
+
 
               <p>
 
@@ -180,6 +384,7 @@ function Focus() {
               </p>
 
             </div>
+
 
 
             <div className="focus-live">
@@ -192,9 +397,10 @@ function Focus() {
 
 
 
-          {/* PRESETS */}
+          {/* ================= PRESETS ================= */}
 
           <div className="timer-presets">
+
 
 
             <button
@@ -207,6 +413,7 @@ function Focus() {
             </button>
 
 
+
             <button
               className="preset-btn"
               onClick={()=>handlePreset(45)}
@@ -215,6 +422,7 @@ function Focus() {
               45 Min
 
             </button>
+
 
 
             <button
@@ -230,9 +438,10 @@ function Focus() {
 
 
 
-          {/* CUSTOM */}
+          {/* ================= CUSTOM ================= */}
 
           <div className="custom-timer-box">
+
 
 
             <label>
@@ -242,7 +451,9 @@ function Focus() {
             </label>
 
 
+
             <div className="custom-inputs">
+
 
 
               <input
@@ -259,6 +470,7 @@ function Focus() {
               />
 
 
+
               <input
                 type="number"
                 placeholder="Minutes"
@@ -271,6 +483,7 @@ function Focus() {
                   )
                 }
               />
+
 
 
               <button
@@ -287,12 +500,15 @@ function Focus() {
 
 
 
-          {/* TIMER RING */}
+          {/* ================= TIMER RING ================= */}
 
           <div className="timer-ring">
 
 
+
             <div className="timer-ring-inner">
+
+
 
               <h1>
 
@@ -301,6 +517,7 @@ function Focus() {
                 {formatTime(seconds)}
 
               </h1>
+
 
 
               <p>
@@ -315,9 +532,10 @@ function Focus() {
 
 
 
-          {/* BUTTONS */}
+          {/* ================= BUTTONS ================= */}
 
           <div className="focus-controls">
+
 
 
             <button
@@ -364,9 +582,10 @@ function Focus() {
 
 
 
-        {/* SIDE PANEL */}
+        {/* ================= SIDE PANEL ================= */}
 
         <div className="focus-side-panel">
+
 
 
           <div className="focus-mini-card">
@@ -442,6 +661,239 @@ function Focus() {
         </div>
 
       </div>
+
+
+
+      {/* ================= MUSIC SECTION ================= */}
+
+      <section className="focus-music-section">
+
+
+
+        <div className="music-header">
+
+
+
+          <div>
+
+
+
+            <h2>
+
+              <FaMusic />
+
+              Focus Sound Environment
+
+            </h2>
+
+
+
+            <p>
+
+              AI selected ambient sounds
+              designed for deep work sessions.
+
+            </p>
+
+          </div>
+
+
+
+          <div className="music-volume">
+
+
+
+            <FaVolumeUp />
+
+
+
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+
+              value={volume}
+
+              onChange={(e)=>
+                setVolume(
+                  e.target.value
+                )
+              }
+            />
+
+          </div>
+
+        </div>
+
+
+
+        {/* ================= MUSIC GRID ================= */}
+
+        <div className="music-grid">
+
+
+
+          {
+            tracks.map((track)=>(
+
+              <div
+                className={
+
+                  currentTrack?.id === track.id
+
+                  ?
+
+                  'music-card active'
+
+                  :
+
+                  'music-card'
+                }
+
+                key={track.id}
+              >
+
+
+
+                <div className="music-card-top">
+
+
+
+                  <div className="music-icon">
+
+                    {track.icon}
+
+                  </div>
+
+
+
+                  <div>
+
+
+
+                    <h3>
+
+                      {track.title}
+
+                    </h3>
+
+
+
+                    <p>
+
+                      Deep Focus Audio
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+
+                <button
+
+                  className="music-play-btn"
+
+                  onClick={()=>
+                    handleMusic(track)
+                  }
+                >
+
+                  {
+                    currentTrack?.id === track.id
+                    &&
+                    isMusicPlaying
+
+                    ?
+
+                    <>
+
+                      <FaPause />
+
+                      Pause
+                    </>
+
+                    :
+
+                    <>
+
+                      <FaPlay />
+
+                      Play
+                    </>
+                  }
+
+                </button>
+
+              </div>
+            ))
+          }
+
+        </div>
+
+
+
+        {/* ================= NOW PLAYING ================= */}
+
+        {
+          currentTrack && (
+
+            <div className="now-playing">
+
+
+
+              <div className="now-left">
+
+
+
+                <FaHeadphones />
+
+
+
+                <div>
+
+
+
+                  <h3>
+
+                    Now Playing
+
+                  </h3>
+
+
+
+                  <p>
+
+                    {
+                      currentTrack.title
+                    }
+
+                  </p>
+
+                </div>
+
+              </div>
+
+
+
+              <div className="wave-animation">
+
+
+
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+
+              </div>
+
+            </div>
+          )
+        }
+
+      </section>
 
     </div>
   )
