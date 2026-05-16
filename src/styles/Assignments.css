@@ -1,0 +1,827 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* =========================
+   ROOT
+========================= */
+
+.assignments-page {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: 100vh;
+    padding: 40px;
+    background: linear-gradient( 135deg, #f4fbff 0%, #f7f5ff 100%);
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.assignment-hero {
+    display: grid;
+    grid-template-columns: 1.4fr .6fr;
+    gap: 30px;
+    margin-bottom: 35px;
+}
+
+.assignment-hero-left {
+    position: relative;
+    overflow: hidden;
+    padding: 48px;
+    border-radius: 34px;
+    background: linear-gradient( 135deg, rgba(0, 212, 255, .08), rgba(124, 77, 255, .07));
+    border: 1px solid rgba(255, 255, 255, .45);
+    backdrop-filter: blur(16px);
+}
+
+.assignment-hero-left::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: -140px;
+    right: -80px;
+    border-radius: 50%;
+    background: radial-gradient( circle, rgba(0, 212, 255, .25), transparent 70%);
+}
+
+.assignment-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: rgba(0, 212, 255, .08);
+    border: 1px solid rgba(0, 212, 255, .12);
+    color: #00a6ff;
+    font-size: .9rem;
+    font-weight: 600;
+    margin-bottom: 28px;
+}
+
+.assignment-hero h1 {
+    position: relative;
+    z-index: 2;
+    font-size: 4rem;
+    line-height: 1.08;
+    letter-spacing: -2px;
+    color: #0f172a;
+    margin-bottom: 24px;
+    font-weight: 700;
+}
+
+.assignment-hero p {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: #64748b;
+}
+
+
+/* =========================
+   AI CARD
+========================= */
+
+.assignment-ai-card {
+    border-radius: 32px;
+    padding: 34px;
+    background: linear-gradient( 135deg, rgba(0, 212, 255, .10), rgba(124, 77, 255, .10));
+    border: 1px solid rgba(255, 255, 255, .45);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    backdrop-filter: blur(16px);
+}
+
+.assignment-ai-card h3 {
+    font-size: 1.6rem;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.assignment-ai-card p {
+    color: #64748b;
+    line-height: 2;
+    margin-bottom: 28px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.assignment-ai-card button,
+.add-assignment-btn,
+.complete-btn,
+.focus-recommendation button {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    background: linear-gradient( 135deg, #18c5ff, #6b5cff);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .35s ease;
+}
+
+.assignment-ai-card button::before,
+.add-assignment-btn::before,
+.complete-btn::before,
+.focus-recommendation button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, .15);
+    transition: .4s;
+}
+
+.assignment-ai-card button:hover::before,
+.add-assignment-btn:hover::before,
+.complete-btn:hover::before,
+.focus-recommendation button:hover::before {
+    width: 100%;
+}
+
+.assignment-ai-card button {
+    height: 58px;
+    border-radius: 18px;
+    font-size: 1rem;
+}
+
+.assignment-ai-card button:hover,
+.add-assignment-btn:hover,
+.complete-btn:hover,
+.focus-recommendation button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(70, 120, 255, .25);
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.assignment-search-row {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.assignment-search {
+    height: 70px;
+    background: white;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 24px;
+    border: 1px solid rgba(0, 0, 0, .05);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .04);
+    transition: .3s;
+}
+
+.assignment-search:focus-within {
+    border-color: #18c5ff;
+    box-shadow: 0 0 0 4px rgba(24, 197, 255, .10);
+}
+
+.assignment-search svg {
+    color: #64748b;
+    font-size: 1rem;
+}
+
+.assignment-search input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: none;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
+.add-assignment-btn {
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+
+/* =========================
+   FILTER
+========================= */
+
+.filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+}
+
+.filter-btn {
+    height: 48px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 16px;
+    background: white;
+    color: #64748b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background: linear-gradient( 135deg, #18c5ff, #6b5cff);
+    color: white;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.assignment-form {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    margin-bottom: 40px;
+}
+
+.assignment-form input,
+.assignment-form select {
+    height: 66px;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .75);
+    backdrop-filter: blur(14px);
+    padding: 0 22px;
+    font-size: 1rem;
+    color: #0f172a;
+    border: 1px solid rgba(255, 255, 255, .45);
+    transition: .3s;
+}
+
+.assignment-form input:focus,
+.assignment-form select:focus {
+    border-color: #18c5ff;
+    box-shadow: 0 0 0 4px rgba(24, 197, 255, .10);
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.assignment-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 42px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 30px;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border: 1px solid rgba(0, 0, 0, .05);
+    transition: .35s ease;
+    animation: fadeUp .5s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 25px 50px rgba(15, 23, 42, .08);
+}
+
+.stat-card svg {
+    font-size: 2rem;
+    color: #18c5ff;
+}
+
+.stat-card h1 {
+    font-size: 2rem;
+    color: #0f172a;
+    margin-bottom: 5px;
+}
+
+.stat-card p {
+    color: #64748b;
+}
+
+
+/* =========================
+   MAIN GRID
+========================= */
+
+.assignment-main-grid {
+    display: grid;
+    grid-template-columns: 1.4fr .6fr;
+    gap: 28px;
+}
+
+.section-title {
+    font-size: 2rem;
+    color: #0f172a;
+    margin-bottom: 24px;
+}
+
+
+/* =========================
+   ASSIGNMENT LIST
+========================= */
+
+.assignment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.assignment-card {
+    background: white;
+    border-radius: 32px;
+    padding: 34px;
+    border: 1px solid rgba(0, 0, 0, .05);
+    transition: .35s ease;
+    animation: fadeUp .5s ease;
+}
+
+.assignment-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(15, 23, 42, .10);
+    border-color: rgba(24, 197, 255, .20);
+}
+
+.assignment-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.assignment-card h2 {
+    font-size: 1.8rem;
+    color: #0f172a;
+    margin-top: 16px;
+}
+
+
+/* =========================
+   PRIORITY
+========================= */
+
+.priority-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: 700;
+}
+
+.priority-badge.high {
+    background: #ffe4ea;
+    color: #ff2f5b;
+}
+
+.priority-badge.medium {
+    background: #fff4d8;
+    color: #ff9800;
+}
+
+.priority-badge.low {
+    background: #dcfff0;
+    color: #00b96b;
+}
+
+
+/* =========================
+   DELETE BTN
+========================= */
+
+.delete-btn {
+    width: 52px;
+    height: 52px;
+    border: none;
+    border-radius: 16px;
+    background: #fff1f2;
+    color: #ff4d5a;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.delete-btn:hover {
+    transform: scale(1.06);
+}
+
+
+/* =========================
+   META
+========================= */
+
+.assignment-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.assignment-meta span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #64748b;
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.assignment-progress {
+    margin-bottom: 26px;
+}
+
+.assignment-progress-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    color: #64748b;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #edf2f7;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient( 135deg, #18c5ff, #6b5cff);
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.assignment-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.complete-btn {
+    height: 52px;
+    padding: 0 22px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* =========================
+   SIDE PANEL
+========================= */
+
+.assignment-side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.stress-card,
+.focus-recommendation,
+.kanban-section {
+    background: white;
+    border-radius: 30px;
+    padding: 30px;
+    border: 1px solid rgba(0, 0, 0, .05);
+    transition: .35s ease;
+    animation: fadeUp .5s ease;
+}
+
+.stress-card:hover,
+.focus-recommendation:hover,
+.kanban-section:hover {
+    transform: translateY(-5px);
+}
+
+.stress-card h3,
+.focus-recommendation h3,
+.kanban-section h3 {
+    font-size: 1.4rem;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+.stress-card p,
+.focus-recommendation p {
+    color: #64748b;
+    line-height: 1.9;
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   STRESS BAR
+========================= */
+
+.stress-bar {
+    width: 100%;
+    height: 14px;
+    background: #edf2f7;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.stress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient( 90deg, #ff9800, #ff1744);
+}
+
+
+/* =========================
+   SIDE BTN
+========================= */
+
+.focus-recommendation button {
+    width: 100%;
+    height: 56px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+
+/* =========================
+   KANBAN
+========================= */
+
+.kanban-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.kanban-card {
+    background: #f8fbff;
+    border-radius: 20px;
+    padding: 22px;
+}
+
+.kanban-card h4 {
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.kanban-card span {
+    color: #64748b;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-state {
+    background: white;
+    border-radius: 30px;
+    padding: 60px 30px;
+    text-align: center;
+}
+
+.empty-state h3 {
+    font-size: 1.8rem;
+    color: #0f172a;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    color: #64748b;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark .assignments-page {
+    background: linear-gradient( 135deg, #050816, #09152f);
+}
+
+body.dark .assignment-hero-left,
+body.dark .assignment-ai-card,
+body.dark .assignment-search,
+body.dark .assignment-form input,
+body.dark .assignment-form select,
+body.dark .filter-btn,
+body.dark .stat-card,
+body.dark .assignment-card,
+body.dark .stress-card,
+body.dark .focus-recommendation,
+body.dark .kanban-section,
+body.dark .kanban-card,
+body.dark .empty-state {
+    background: rgba(15, 23, 42, .82);
+    border: 1px solid rgba(255, 255, 255, .06);
+}
+
+body.dark .assignment-hero h1,
+body.dark .assignment-ai-card h3,
+body.dark .section-title,
+body.dark .assignment-card h2,
+body.dark .stat-card h1,
+body.dark .stress-card h3,
+body.dark .focus-recommendation h3,
+body.dark .kanban-section h3,
+body.dark .kanban-card h4,
+body.dark .empty-state h3 {
+    color: white;
+}
+
+body.dark .assignment-hero p,
+body.dark .assignment-ai-card p,
+body.dark .assignment-meta span,
+body.dark .assignment-progress-top,
+body.dark .stat-card p,
+body.dark .stress-card p,
+body.dark .focus-recommendation p,
+body.dark .kanban-card span,
+body.dark .empty-state p {
+    color: #94a3b8;
+}
+
+body.dark .assignment-search {
+    background: rgba(15, 23, 42, .82);
+}
+
+body.dark .assignment-search input,
+body.dark .assignment-form input,
+body.dark .assignment-form select {
+    color: white;
+}
+
+body.dark .assignment-search svg {
+    color: white;
+}
+
+body.dark .assignment-form input,
+body.dark .assignment-form select {
+    background: rgba(255, 255, 255, .03);
+}
+
+body.dark .filter-btn {
+    color: #cbd5e1;
+}
+
+body.dark .kanban-card {
+    background: rgba(255, 255, 255, .03);
+}
+
+body.dark .progress-bar,
+body.dark .stress-bar {
+    background: rgba(255, 255, 255, .06);
+}
+
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1200px) {
+    .assignment-hero,
+    .assignment-main-grid {
+        grid-template-columns: 1fr;
+    }
+    .assignment-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .assignment-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:768px) {
+    .assignments-page {
+        padding: 22px;
+    }
+    .assignment-hero h1 {
+        font-size: 2.8rem;
+    }
+    .assignment-search-row {
+        grid-template-columns: 1fr;
+    }
+    .assignment-stats {
+        grid-template-columns: 1fr;
+    }
+    .assignment-form {
+        grid-template-columns: 1fr;
+    }
+    .assignment-card-top {
+        flex-direction: column;
+    }
+    .assignment-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .complete-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .delete-btn {
+        width: 100%;
+        height: 54px;
+    }
+    .assignment-card h2 {
+        font-size: 1.4rem;
+    }
+    .assignment-meta {
+        gap: 14px;
+    }
+}
+
+@media(max-width:480px) {
+    .assignment-hero-left,
+    .assignment-ai-card {
+        padding: 28px;
+    }
+    .assignment-hero h1 {
+        font-size: 2.2rem;
+    }
+    .section-title {
+        font-size: 1.6rem;
+    }
+    .assignment-card {
+        padding: 24px;
+    }
+    .stat-card {
+        padding: 24px;
+    }
+}

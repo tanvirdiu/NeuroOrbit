@@ -4,29 +4,35 @@ import {
   useState,
   useContext,
   useEffect
-} from 'react'
+}
+from 'react'
 
 import {
   Outlet,
   NavLink,
   useNavigate
-} from 'react-router-dom'
+}
+from 'react-router-dom'
 
 import {
   signOut
-} from 'firebase/auth'
+}
+from 'firebase/auth'
 
 import {
   auth
-} from '../firebase/firebase'
+}
+from '../firebase/firebase'
 
 import {
   AuthContext
-} from '../context/AuthContext'
+}
+from '../context/AuthContext'
 
 import {
   ThemeContext
-} from '../context/ThemeContext'
+}
+from '../context/ThemeContext'
 
 import {
 
@@ -42,11 +48,18 @@ import {
   FaMoon,
   FaSun
 
-} from 'react-icons/fa'
+}
+from 'react-icons/fa'
 
 import '../styles/dashboardLayout.css'
 
+
+
 function DashboardLayout() {
+
+
+
+  /* ================= STATES ================= */
 
   const [sidebarOpen,setSidebarOpen] =
   useState(false)
@@ -55,9 +68,13 @@ function DashboardLayout() {
   useState(window.innerWidth >= 992)
 
 
+
+  /* ================= CONTEXT ================= */
+
   const {
     user
   } = useContext(AuthContext)
+
 
 
   const {
@@ -66,12 +83,13 @@ function DashboardLayout() {
   } = useContext(ThemeContext)
 
 
+
   const navigate =
   useNavigate()
 
 
 
-  /* RESPONSIVE */
+  /* ================= RESPONSIVE ================= */
 
   useEffect(() => {
 
@@ -81,18 +99,26 @@ function DashboardLayout() {
         window.innerWidth >= 992
       )
 
+
+
       if(window.innerWidth >= 992){
 
         setSidebarOpen(false)
       }
     }
 
+
+
     handleResize()
+
+
 
     window.addEventListener(
       'resize',
       handleResize
     )
+
+
 
     return () =>
 
@@ -105,7 +131,7 @@ function DashboardLayout() {
 
 
 
-  /* LOGOUT */
+  /* ================= LOGOUT ================= */
 
   const handleLogout =
   async () => {
@@ -125,7 +151,7 @@ function DashboardLayout() {
 
 
 
-  /* CLOSE SIDEBAR */
+  /* ================= CLOSE SIDEBAR ================= */
 
   const closeSidebar = () => {
 
@@ -139,10 +165,11 @@ function DashboardLayout() {
 
   return (
 
-    <div className="layout">
+    <div className={`layout ${theme}`}>
 
 
-      {/* MOBILE MENU */}
+
+      {/* ================= MOBILE MENU ================= */}
 
       {
         !isDesktop && (
@@ -159,8 +186,14 @@ function DashboardLayout() {
 
             {
               sidebarOpen
-              ? <FaTimes />
-              : <FaBars />
+
+              ?
+
+              <FaTimes />
+
+              :
+
+              <FaBars />
             }
 
           </button>
@@ -169,28 +202,40 @@ function DashboardLayout() {
 
 
 
-      {/* SIDEBAR */}
+      {/* ================= SIDEBAR ================= */}
 
       <aside
         className={
 
           isDesktop
 
-          ? 'layout-sidebar desktop'
+          ?
 
-          : sidebarOpen
-          ? 'layout-sidebar active'
-          : 'layout-sidebar'
+          'layout-sidebar desktop'
+
+          :
+
+          sidebarOpen
+
+          ?
+
+          'layout-sidebar active'
+
+          :
+
+          'layout-sidebar'
         }
       >
 
 
-        {/* TOP */}
+
+        {/* ================= TOP ================= */}
 
         <div className="sidebar-top">
 
 
-          {/* LOGO */}
+
+          {/* ================= LOGO ================= */}
 
           <img
             src={logo}
@@ -200,10 +245,13 @@ function DashboardLayout() {
 
 
 
-          {/* LINKS */}
+          {/* ================= LINKS ================= */}
 
           <div className="sidebar-links">
 
+
+
+            {/* ===== DASHBOARD ===== */}
 
             <NavLink
               to="/dashboard"
@@ -214,9 +262,13 @@ function DashboardLayout() {
 
                 isActive
 
-                ? 'sidebar-link active'
+                ?
 
-                : 'sidebar-link'
+                'sidebar-link active'
+
+                :
+
+                'sidebar-link'
               }
             >
 
@@ -232,6 +284,8 @@ function DashboardLayout() {
 
 
 
+            {/* ===== FOCUS ===== */}
+
             <NavLink
               to="/focus"
 
@@ -241,9 +295,13 @@ function DashboardLayout() {
 
                 isActive
 
-                ? 'sidebar-link active'
+                ?
 
-                : 'sidebar-link'
+                'sidebar-link active'
+
+                :
+
+                'sidebar-link'
               }
             >
 
@@ -259,7 +317,26 @@ function DashboardLayout() {
 
 
 
-            <div className="sidebar-link">
+            {/* ===== ASSIGNMENTS ===== */}
+
+            <NavLink
+              to="/assignments"
+
+              onClick={closeSidebar}
+
+              className={({isActive}) =>
+
+                isActive
+
+                ?
+
+                'sidebar-link active'
+
+                :
+
+                'sidebar-link'
+              }
+            >
 
               <FaTasks />
 
@@ -269,25 +346,63 @@ function DashboardLayout() {
 
               </span>
 
-            </div>
+            </NavLink>
 
 
 
-            <div className="sidebar-link">
+            {/* ===== ANALYSIS ===== */}
+
+            <NavLink
+              to="/analysis"
+
+              onClick={closeSidebar}
+
+              className={({isActive}) =>
+
+                isActive
+
+                ?
+
+                'sidebar-link active'
+
+                :
+
+                'sidebar-link'
+              }
+            >
 
               <FaBrain />
 
               <span>
 
-                Analytics
+                Analysis
 
               </span>
 
-            </div>
+            </NavLink>
 
 
 
-            <div className="sidebar-link">
+            {/* ===== INSIGHTS ===== */}
+
+            <NavLink
+              to="/insights"
+
+              onClick={closeSidebar}
+
+              className={({isActive}) =>
+
+                isActive
+
+                ?
+
+                'sidebar-link active'
+
+                :
+
+                'sidebar-link'
+              }
+            >
 
               <FaLightbulb />
 
@@ -297,11 +412,30 @@ function DashboardLayout() {
 
               </span>
 
-            </div>
+            </NavLink>
 
 
 
-            <div className="sidebar-link">
+            {/* ===== PROFILE ===== */}
+
+            <NavLink
+              to="/profile"
+
+              onClick={closeSidebar}
+
+              className={({isActive}) =>
+
+                isActive
+
+                ?
+
+                'sidebar-link active'
+
+                :
+
+                'sidebar-link'
+              }
+            >
 
               <FaUserCircle />
 
@@ -311,11 +445,30 @@ function DashboardLayout() {
 
               </span>
 
-            </div>
+            </NavLink>
 
 
 
-            <div className="sidebar-link">
+            {/* ===== SETTINGS ===== */}
+
+            <NavLink
+              to="/settings"
+
+              onClick={closeSidebar}
+
+              className={({isActive}) =>
+
+                isActive
+
+                ?
+
+                'sidebar-link active'
+
+                :
+
+                'sidebar-link'
+              }
+            >
 
               <FaCog />
 
@@ -325,7 +478,7 @@ function DashboardLayout() {
 
               </span>
 
-            </div>
+            </NavLink>
 
           </div>
 
@@ -333,7 +486,7 @@ function DashboardLayout() {
 
 
 
-        {/* BOTTOM */}
+        {/* ================= BOTTOM ================= */}
 
         <div className="sidebar-bottom">
 
@@ -354,12 +507,13 @@ function DashboardLayout() {
 
 
 
-      {/* MAIN */}
+      {/* ================= MAIN ================= */}
 
       <main className="layout-main">
 
 
-        {/* TOPBAR */}
+
+        {/* ================= TOPBAR ================= */}
 
         <div className="layout-topbar">
 
@@ -367,7 +521,8 @@ function DashboardLayout() {
           <div className="layout-user">
 
 
-            {/* THEME BUTTON */}
+
+            {/* ===== THEME BUTTON ===== */}
 
             <button
               className="top-theme-btn"
@@ -380,25 +535,56 @@ function DashboardLayout() {
               {
                 theme === 'dark'
 
-                ? <FaSun />
+                ?
 
-                : <FaMoon />
+                <FaSun />
+
+                :
+
+                <FaMoon />
               }
 
             </button>
 
 
 
-            {/* USER */}
+            {/* ===== USER AVATAR ===== */}
 
             <div className="user-avatar">
 
-              {
-                user?.email
-                ?.charAt(0)
-                ?.toUpperCase()
 
-                || 'U'
+              {
+                user?.photoURL
+
+                ?
+
+                <img
+                  src={user.photoURL}
+                  alt="User"
+                  className="topbar-user-image"
+                />
+
+                :
+
+                <span>
+
+                  {
+                    user?.displayName
+                    ?.charAt(0)
+                    ?.toUpperCase()
+
+                    ||
+
+                    user?.email
+                    ?.charAt(0)
+                    ?.toUpperCase()
+
+                    ||
+
+                    'U'
+                  }
+
+                </span>
               }
 
             </div>
@@ -409,7 +595,7 @@ function DashboardLayout() {
 
 
 
-        {/* PAGE */}
+        {/* ================= PAGE CONTENT ================= */}
 
         <Outlet />
 

@@ -1,14 +1,19 @@
 import {
   useContext
-} from 'react'
+}
+from 'react'
 
 import {
   Navigate
-} from 'react-router-dom'
+}
+from 'react-router-dom'
 
 import {
   AuthContext
-} from '../context/AuthContext'
+}
+from '../context/AuthContext'
+
+
 
 function ProtectedRoute({
   children
@@ -19,15 +24,53 @@ function ProtectedRoute({
     loading
   } = useContext(AuthContext)
 
+
+
+  /* ================= LOADING ================= */
+
   if(loading){
 
-    return <h1>Loading...</h1>
+    return(
+
+      <div
+        style={{
+
+          minHeight:'100vh',
+
+          display:'flex',
+
+          justifyContent:'center',
+
+          alignItems:'center',
+
+          background:'#0b1120',
+
+          color:'white',
+
+          fontSize:'24px',
+
+          fontWeight:'700'
+        }}
+      >
+
+        Loading...
+
+      </div>
+    )
   }
+
+
+
+  /* ================= NO USER ================= */
 
   if(!user){
 
-    return <Navigate to="/login" />
+    return <Navigate to="/login" replace />
   }
+
+
+
+  /* ================= ACCESS ================= */
 
   return children
 }

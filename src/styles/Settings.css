@@ -1,0 +1,311 @@
+.settings-page {
+    min-height: 100vh;
+    display: flex;
+    background: #0b1120;
+    color: white;
+}
+
+
+/* ================= LIGHT ================= */
+
+.settings-page.light {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+
+/* ================= LOADING ================= */
+
+.settings-loading {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #0b1120;
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+
+/* ================= SIDEBAR ================= */
+
+.settings-sidebar {
+    width: 300px;
+    padding: 30px;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.settings-sidebar h2 {
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+
+/* ================= TAB ================= */
+
+.settings-tab {
+    padding: 18px;
+    border: none;
+    border-radius: 16px;
+    background: transparent;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.settings-tab:hover {
+    background: rgba(139, 92, 246, 0.15);
+}
+
+.settings-tab.active {
+    background: linear-gradient( 135deg, #8b5cf6, #3b82f6);
+}
+
+
+/* ================= CONTENT ================= */
+
+.settings-content {
+    flex: 1;
+    padding: 40px;
+}
+
+
+/* ================= HEADER ================= */
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.settings-header h1 {
+    font-size: 48px;
+    font-weight: 800;
+}
+
+
+/* ================= CARD ================= */
+
+.settings-card {
+    padding: 35px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+}
+
+.settings-card h2 {
+    margin-bottom: 30px;
+    font-size: 32px;
+}
+
+
+/* ================= INPUT ================= */
+
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+
+/* ================= TOGGLE ================= */
+
+.toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.toggle-row h3 {
+    margin-bottom: 6px;
+}
+
+
+/* ================= BUTTONS ================= */
+
+.save-btn,
+.logout-btn,
+.theme-toggle {
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.save-btn {
+    padding: 16px 24px;
+    border-radius: 14px;
+    background: linear-gradient( 135deg, #8b5cf6, #3b82f6);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.logout-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 18px;
+    border-radius: 14px;
+    background: #ef4444;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.theme-toggle {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient( 135deg, #8b5cf6, #3b82f6);
+    color: white;
+    font-size: 20px;
+}
+
+
+/* ================= STATUS ================= */
+
+.success-box,
+.error-box {
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.success-box {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.error-box {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+
+/* ================= AI STATUS ================= */
+
+.ai-status {
+    padding: 22px;
+    border-radius: 20px;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.ai-status svg {
+    font-size: 28px;
+    color: #8b5cf6;
+}
+
+
+/* ================= LIGHT MODE ================= */
+
+.settings-page.light .settings-sidebar {
+    background: white;
+    border-right: 1px solid #e2e8f0;
+}
+
+.settings-page.light .settings-tab {
+    color: #0f172a;
+}
+
+.settings-page.light .settings-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.settings-page.light .input-group input {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #0f172a;
+}
+
+.settings-page.light .ai-status {
+    background: #f8fafc;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1100px) {
+    .settings-page {
+        flex-direction: column;
+    }
+    .settings-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+}
+
+@media(max-width:768px) {
+    .settings-content {
+        padding: 20px;
+    }
+    .settings-header h1 {
+        font-size: 36px;
+    }
+    .settings-card {
+        padding: 25px;
+    }
+    .toggle-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media(max-width:480px) {
+    .settings-header h1 {
+        font-size: 28px;
+    }
+    .settings-sidebar {
+        padding: 20px;
+    }
+    .settings-content {
+        padding: 15px;
+    }
+}

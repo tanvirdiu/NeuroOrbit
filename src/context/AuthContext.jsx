@@ -15,18 +15,30 @@ import {
 }
 from '../firebase/firebase'
 
+
+
 export const AuthContext =
 createContext()
+
+
 
 function AuthProvider({
   children
 }) {
+
+
+
+  /* ================= STATES ================= */
 
   const [user,setUser] =
   useState(null)
 
   const [loading,setLoading] =
   useState(true)
+
+
+
+  /* ================= AUTH OBSERVER ================= */
 
   useEffect(() => {
 
@@ -43,16 +55,26 @@ function AuthProvider({
       }
     )
 
+
+
     return () =>
     unsubscribe()
 
   },[])
 
+
+
+  /* ================= PROVIDER ================= */
+
   return (
 
     <AuthContext.Provider
+
       value={{
+
         user,
+        setUser,
+
         loading
       }}
     >

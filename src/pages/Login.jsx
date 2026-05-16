@@ -1,6 +1,8 @@
 import logo from '../assets/logo.png'
+
 import {
-  useState
+  useState,
+  useEffect
 } from 'react'
 
 import {
@@ -9,17 +11,31 @@ import {
 } from 'react-router-dom'
 
 import {
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  onAuthStateChanged
 } from 'firebase/auth'
 
 import {
   auth
 } from '../firebase/firebase'
 
+
+
 function Login() {
+
+
+  /* =========================
+     NAVIGATE
+  ========================= */
 
   const navigate =
   useNavigate()
+
+
+
+  /* =========================
+     STATES
+  ========================= */
 
   const [email,setEmail] =
   useState('')
@@ -30,19 +46,59 @@ function Login() {
   const [error,setError] =
   useState('')
 
+  const [loading,setLoading] =
+  useState(false)
+
+
+
+  /* =========================
+     AUTO LOGIN CHECK
+  ========================= */
+
+  useEffect(()=>{
+
+    const unsubscribe =
+
+    onAuthStateChanged(
+
+      auth,
+
+      (user)=>{
+
+        if(user){
+
+          navigate('/dashboard')
+        }
+      }
+    )
+
+    return ()=>unsubscribe()
+
+  },[])
+
+
+
+  /* =========================
+     LOGIN
+  ========================= */
 
   const handleLogin =
-  async(e) => {
+  async(e)=>{
 
     e.preventDefault()
 
     setError('')
 
+    setLoading(true)
+
     try{
 
       await signInWithEmailAndPassword(
+
         auth,
-        email,
+
+        email.trim(),
+
         password
       )
 
@@ -51,14 +107,65 @@ function Login() {
 
     catch(err){
 
-      setError(
-        'Invalid email or password'
-      )
-
       console.log(err.message)
+
+
+
+      if(
+        err.code ===
+        'auth/invalid-credential'
+      ){
+
+        setError(
+          'Invalid email or password'
+        )
+      }
+
+
+
+      else if(
+        err.code ===
+        'auth/too-many-requests'
+      ){
+
+        setError(
+          'Too many attempts. Try again later.'
+        )
+      }
+
+
+
+      else if(
+        err.code ===
+        'auth/network-request-failed'
+      ){
+
+        setError(
+          'Network error. Check your internet.'
+        )
+      }
+
+
+
+      else{
+
+        setError(
+          'Login failed'
+        )
+      }
+    }
+
+    finally{
+
+      setLoading(false)
     }
   }
 
+
+
+  /* =========================
+     JSX
+  ========================= */
 
   return (
 
@@ -72,6 +179,7 @@ function Login() {
 
         <div className="auth-left">
 
+
           <div className="auth-overlay" />
 
 
@@ -82,19 +190,25 @@ function Login() {
           </h1>
 
 
+
+          {/* LOGO */}
+
           <div className="auth-illustration">
 
-  <img
-    src={logo}
-    alt="NeuroOrbit"
-    className="auth-logo"
-  />
 
-  <span className="auth-dot one"></span>
+            <img
+              src={logo}
+              alt="NeuroOrbit"
+              className="auth-logo"
+            />
 
-  <span className="auth-dot two"></span>
 
-</div>
+            <span className="auth-dot one"></span>
+
+            <span className="auth-dot two"></span>
+
+          </div>
+
 
 
           <p>
@@ -111,6 +225,7 @@ function Login() {
 
         <div className="auth-right">
 
+
           <h2>
 
             LOGIN
@@ -118,11 +233,14 @@ function Login() {
           </h2>
 
 
+
           <form
             className="auth-form"
             onSubmit={handleLogin}
           >
 
+
+            {/* EMAIL */}
 
             <input
               type="email"
@@ -140,6 +258,9 @@ function Login() {
             />
 
 
+
+            {/* PASSWORD */}
+
             <input
               type="password"
               placeholder="Password"
@@ -156,6 +277,9 @@ function Login() {
             />
 
 
+
+            {/* ERROR */}
+
             {
               error && (
 
@@ -163,7 +287,8 @@ function Login() {
                   style={{
                     color:'#ef4444',
                     fontSize:'.95rem',
-                    marginTop:'-6px'
+                    marginTop:'-6px',
+                    fontWeight:'500'
                   }}
                 >
 
@@ -174,12 +299,22 @@ function Login() {
             }
 
 
+
+            {/* BUTTON */}
+
             <button
               className="auth-btn"
               type="submit"
+              disabled={loading}
             >
 
-              Login
+              {
+                loading
+
+                ? 'Signing In...'
+
+                : 'Login'
+              }
 
             </button>
 
@@ -187,9 +322,13 @@ function Login() {
 
 
 
+          {/* FOOTER */}
+
           <div className="auth-footer">
 
+
             Don’t have an account?
+
 
             <Link to="/register">
 

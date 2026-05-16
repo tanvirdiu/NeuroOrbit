@@ -1,19 +1,22 @@
 import {
     initializeApp
-}
-from 'firebase/app'
+} from 'firebase/app'
 
 import {
     getAuth,
     GoogleAuthProvider
-}
-from 'firebase/auth'
+} from 'firebase/auth'
 
 import {
-    getFirestore
-}
-from 'firebase/firestore'
+    getFirestore,
+    enableIndexedDbPersistence
+} from 'firebase/firestore'
 
+
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
 
 const firebaseConfig = {
 
@@ -33,16 +36,61 @@ const firebaseConfig = {
 }
 
 
+
+/* =========================
+   INITIALIZE APP
+========================= */
+
 const app =
     initializeApp(firebaseConfig)
+
+
+
+/* =========================
+   AUTH
+========================= */
 
 export const auth =
     getAuth(app)
 
-export const provider =
+
+
+/* =========================
+   GOOGLE PROVIDER
+========================= */
+
+export const googleProvider =
     new GoogleAuthProvider()
 
-export default app
+
+
+/* =========================
+   FIRESTORE
+========================= */
 
 export const db =
     getFirestore(app)
+
+
+
+/* =========================
+   OFFLINE PERSISTENCE
+========================= */
+
+enableIndexedDbPersistence(db)
+
+.catch((error) => {
+
+    console.log(
+        'Firestore Persistence Error:',
+        error.message
+    )
+})
+
+
+
+/* =========================
+   EXPORT APP
+========================= */
+
+export default app
