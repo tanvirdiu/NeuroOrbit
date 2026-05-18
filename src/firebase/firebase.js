@@ -1,16 +1,24 @@
 import {
     initializeApp
-} from 'firebase/app'
+}
+from 'firebase/app'
 
 import {
     getAuth,
     GoogleAuthProvider
-} from 'firebase/auth'
+}
+from 'firebase/auth'
 
 import {
     getFirestore,
     enableIndexedDbPersistence
-} from 'firebase/firestore'
+}
+from 'firebase/firestore'
+
+import {
+    getStorage
+}
+from 'firebase/storage'
 
 
 
@@ -74,6 +82,15 @@ export const db =
 
 
 /* =========================
+   FIREBASE STORAGE
+========================= */
+
+export const storage =
+    getStorage(app)
+
+
+
+/* =========================
    OFFLINE PERSISTENCE
 ========================= */
 
@@ -82,7 +99,9 @@ enableIndexedDbPersistence(db)
 .catch((error) => {
 
     console.log(
+
         'Firestore Persistence Error:',
+
         error.message
     )
 })

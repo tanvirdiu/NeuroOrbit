@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import './variables.css';
+
+/* ================= GLOBAL ================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +18,10 @@ body {
     background: #0b1120;
     color: var(--text-primary);
     overflow-x: hidden;
-    transition: .3s ease;
+    transition: background .3s ease, color .3s ease;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 a {
@@ -24,7 +30,11 @@ a {
 
 button {
     font-family: inherit;
+    cursor: pointer;
 }
+
+
+/* ================= LANDING PAGE ================= */
 
 .landing-page {
     min-height: 100vh;
@@ -32,7 +42,7 @@ button {
 }
 
 
-/* NAVBAR */
+/* ================= NAVBAR ================= */
 
 .landing-navbar {
     width: 100%;
@@ -63,7 +73,7 @@ button {
 }
 
 
-/* HERO */
+/* ================= HERO ================= */
 
 .landing-hero {
     min-height: 85vh;
@@ -108,6 +118,7 @@ button {
     background: linear-gradient( 135deg, var(--cyan), var(--violet));
     color: white;
     font-weight: 600;
+    border: none;
 }
 
 .secondary-btn {
@@ -115,10 +126,11 @@ button {
     border-radius: 14px;
     border: 1px solid var(--border-color);
     color: var(--text-primary);
+    background: transparent;
 }
 
 
-/* RIGHT CARDS */
+/* ================= RIGHT CARDS ================= */
 
 .hero-right {
     display: flex;
@@ -145,7 +157,65 @@ button {
 }
 
 
-/* MOBILE */
+/* ================= THEME ================= */
+
+body.light {
+    background: #f4f7fb;
+    color: #0f172a;
+}
+
+body.dark {
+    background: #020617;
+    color: white;
+}
+
+
+/* ================= AUTH LOADER ================= */
+
+.auth-loader {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    background: #0b1120;
+    color: white;
+    overflow: hidden;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+.auth-loader h2 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    opacity: .95;
+}
+
+.auth-spinner {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, .08);
+    border-top: 5px solid #7c5cff;
+    animation: spin .8s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ================= MOBILE ================= */
 
 @media(max-width:992px) {
     .landing-hero {
@@ -170,14 +240,4 @@ button {
     .hero-buttons {
         flex-direction: column;
     }
-}
-
-body.light {
-    background: #f4f7fb;
-    color: #0f172a;
-}
-
-body.dark {
-    background: #020617;
-    color: white;
 }

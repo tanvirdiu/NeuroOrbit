@@ -4,44 +4,61 @@ import {
   useState,
   useEffect,
   useMemo
-} from 'react'
+}
+from 'react'
 
 import {
+  useNavigate
+}
+from 'react-router-dom'
+
+import {
+  collection,
   addDoc,
   deleteDoc,
-  updateDoc,
   doc,
-  collection,
   onSnapshot,
   query,
-  orderBy
-} from 'firebase/firestore'
+  where
+}
+from 'firebase/firestore'
 
 import {
   onAuthStateChanged
-} from 'firebase/auth'
+}
+from 'firebase/auth'
 
 import {
   auth,
   db
-} from '../firebase/firebase'
+}
+from '../firebase/firebase'
 
 import {
+
   FaPlus,
   FaSearch,
   FaTrash,
-  FaCheckCircle,
-  FaCalendarAlt,
-  FaChartLine,
-  FaFire,
-  FaBolt,
+  FaClock,
   FaBook,
-  FaClock
-} from 'react-icons/fa'
+  FaCalendarAlt
+
+}
+from 'react-icons/fa'
 
 
 
-function Assignments() {
+function Assignments(){
+
+
+
+  /* =========================
+     NAVIGATE
+  ========================= */
+
+  const navigate =
+  useNavigate()
+
 
 
   /* =========================
@@ -81,7 +98,7 @@ function Assignments() {
 
 
   /* =========================
-     AUTH CHECK
+     AUTH
   ========================= */
 
   useEffect(()=>{
@@ -107,12 +124,15 @@ function Assignments() {
 
 
   /* =========================
-     REALTIME FIRESTORE
+     REALTIME FETCH
   ========================= */
 
   useEffect(()=>{
 
-    if(!user) return
+    if(!user){
+
+      return
+    }
 
 
 
@@ -120,14 +140,13 @@ function Assignments() {
 
       collection(
         db,
-        'users',
-        user.uid,
         'assignments'
       ),
 
-      orderBy(
-        'createdAt',
-        'desc'
+      where(
+        'uid',
+        '==',
+        user.uid
       )
     )
 
@@ -146,8 +165,11 @@ function Assignments() {
         snapshot.docs.map(doc => ({
 
           id:doc.id,
+
           ...doc.data()
         }))
+
+
 
         setAssignments(data)
       }
@@ -174,6 +196,11 @@ function Assignments() {
       !hours ||
       !deadline
     ){
+
+      alert(
+        'Please fill all fields'
+      )
+
       return
     }
 
@@ -185,39 +212,52 @@ function Assignments() {
 
         collection(
           db,
-          'users',
-          user.uid,
           'assignments'
         ),
 
         {
+
+          uid:user.uid,
+
           title,
+
           subject,
-          hours,
+
+          hours:Number(hours),
+
           priority,
+
           deadline,
 
-          progress:0,
+          focusedMinutes:0,
 
           completed:false,
 
           createdAt:
-          new Date()
+          Date.now()
         }
       )
 
 
 
       setTitle('')
+
       setSubject('')
+
       setHours('')
+
       setPriority('Medium')
+
       setDeadline('')
     }
 
     catch(error){
 
       console.log(error)
+
+      alert(
+        'Failed to add assignment'
+      )
     }
   }
 
@@ -236,13 +276,10 @@ function Assignments() {
 
         doc(
           db,
-          'users',
-          user.uid,
           'assignments',
           id
         )
       )
-
     }
 
     catch(error){
@@ -254,88 +291,23 @@ function Assignments() {
 
 
   /* =========================
-     COMPLETE
+     START FOCUS
   ========================= */
 
-  const toggleComplete =
-  async(item)=>{
+  const startFocus =
+  (item)=>{
 
-    try{
+    navigate(
 
-      await updateDoc(
+      '/focus',
 
-        doc(
-          db,
-          'users',
-          user.uid,
-          'assignments',
-          item.id
-        ),
+      {
 
-        {
-          completed:
-          !item.completed,
-
-          progress:
-          !item.completed
-          ? 100
-          : 0
+        state:{
+          assignment:item
         }
-      )
-
-    }
-
-    catch(error){
-
-      console.log(error)
-    }
-  }
-
-
-
-  /* =========================
-     PROGRESS
-  ========================= */
-
-  const increaseProgress =
-  async(item)=>{
-
-    const newProgress =
-
-    item.progress >= 100
-
-    ? 100
-
-    : item.progress + 10
-
-
-
-    try{
-
-      await updateDoc(
-
-        doc(
-          db,
-          'users',
-          user.uid,
-          'assignments',
-          item.id
-        ),
-
-        {
-          progress:newProgress,
-
-          completed:
-          newProgress === 100
-        }
-      )
-
-    }
-
-    catch(error){
-
-      console.log(error)
-    }
+      }
+    )
   }
 
 
@@ -392,67 +364,14 @@ function Assignments() {
 
 
   /* =========================
-     STATS
-  ========================= */
-
-  const totalTasks =
-  assignments.length
-
-
-
-  const completedTasks =
-  assignments.filter(
-    item => item.completed
-  ).length
-
-
-
-  const urgentTasks =
-  assignments.filter(
-    item => item.priority === 'High'
-  ).length
-
-
-
-  const productivity =
-
-  totalTasks === 0
-
-  ? 0
-
-  : Math.round(
-
-      (
-        completedTasks /
-        totalTasks
-      ) * 100
-    )
-
-
-
-  const stressLevel =
-
-  urgentTasks >= 5
-
-  ? 'High Stress'
-
-  : urgentTasks >= 3
-
-  ? 'Medium Stress'
-
-  : 'Low Stress'
-
-
-
-  /* =========================
      LOADING
   ========================= */
 
   if(loading){
 
-    return (
+    return(
 
-      <div className="assignment-loading">
+      <div className="assignments-page">
 
         Loading...
 
@@ -462,25 +381,7 @@ function Assignments() {
 
 
 
-  /* =========================
-     NO USER
-  ========================= */
-
-  if(!user){
-
-    return (
-
-      <div className="assignment-loading">
-
-        Please Login
-
-      </div>
-    )
-  }
-
-
-
-  return (
+  return(
 
     <div className="assignments-page">
 
@@ -514,8 +415,7 @@ function Assignments() {
             Track deadlines,
             productivity,
             focus sessions and
-            AI suggestions in
-            one intelligent workspace.
+            AI suggestions in one intelligent workspace.
 
           </p>
 
@@ -536,13 +436,7 @@ function Assignments() {
 
           <p>
 
-            {
-              urgentTasks > 0
-
-              ? 'Complete urgent tasks first.'
-
-              : 'You are doing great.'
-            }
+            Complete urgent tasks first.
 
           </p>
 
@@ -567,9 +461,7 @@ function Assignments() {
 
         <div className="assignment-search">
 
-
           <FaSearch />
-
 
           <input
             type="text"
@@ -583,19 +475,6 @@ function Assignments() {
           />
 
         </div>
-
-
-
-        <button
-          className="add-assignment-btn"
-          onClick={addAssignment}
-        >
-
-          <FaPlus />
-
-          Add Assignment
-
-        </button>
 
       </div>
 
@@ -620,16 +499,16 @@ function Assignments() {
 
               key={item}
 
-              onClick={()=>
-                setFilter(item)
-              }
-
               className={
                 filter === item
 
                 ? 'filter-btn active'
 
                 : 'filter-btn'
+              }
+
+              onClick={()=>
+                setFilter(item)
               }
             >
 
@@ -714,520 +593,222 @@ function Assignments() {
           }
         />
 
-      </div>
 
 
+        <button
+          className="add-assignment-btn"
+          onClick={addAssignment}
+        >
 
-      {/* STATS */}
+          <FaPlus />
 
-      <div className="assignment-stats">
+          Add Assignment
 
-
-        <div className="stat-card">
-
-          <FaCalendarAlt />
-
-          <div>
-
-            <h1>
-
-              {totalTasks}
-
-            </h1>
-
-            <p>
-
-              Total Tasks
-
-            </p>
-
-          </div>
-
-        </div>
-
-
-
-        <div className="stat-card">
-
-          <FaCheckCircle />
-
-          <div>
-
-            <h1>
-
-              {completedTasks}
-
-            </h1>
-
-            <p>
-
-              Completed
-
-            </p>
-
-          </div>
-
-        </div>
-
-
-
-        <div className="stat-card">
-
-          <FaFire />
-
-          <div>
-
-            <h1>
-
-              {urgentTasks}
-
-            </h1>
-
-            <p>
-
-              Urgent Tasks
-
-            </p>
-
-          </div>
-
-        </div>
-
-
-
-        <div className="stat-card">
-
-          <FaChartLine />
-
-          <div>
-
-            <h1>
-
-              {productivity}%
-
-            </h1>
-
-            <p>
-
-              Productivity
-
-            </p>
-
-          </div>
-
-        </div>
+        </button>
 
       </div>
 
 
 
-      {/* MAIN GRID */}
+      {/* ASSIGNMENTS */}
 
-      <div className="assignment-main-grid">
+      <div className="assignment-list">
 
 
-        {/* LEFT */}
+        {
+          filteredAssignments.length === 0
 
-        <div>
+          ? (
 
+            <div className="empty-state">
 
-          <h2 className="section-title">
+              <h3>
 
-            Pending Assignments
+                No Assignments Yet
 
-          </h2>
+              </h3>
 
+              <p>
 
+                Add your first assignment.
 
-          {
-            filteredAssignments.length === 0
+              </p>
 
-            ? (
+            </div>
+          )
 
-              <div className="empty-state">
+          : (
 
-                <h3>
+            filteredAssignments.map(item => {
 
-                  No Assignments Found
 
-                </h3>
 
-                <p>
+              const currentMinutes =
 
-                  Add your first assignment.
+                item.focusedMinutes ??
+                0
 
-                </p>
 
-              </div>
-            )
 
-            : (
+              const progress =
 
-              <div className="assignment-list">
+                Math.min(
 
+                  (
+                    currentMinutes /
+                    ((item.hours || 1) * 60)
+                  ) * 100,
 
-                {
-                  filteredAssignments.map(item => (
+                  100
+                )
 
-                    <div
-                      key={item.id}
-                      className="assignment-card"
-                    >
 
 
-                      {/* TOP */}
+              return(
 
-                      <div className="assignment-card-top">
+                <div
+                  key={item.id}
+                  className="assignment-card"
+                >
 
 
-                        <div>
+                  <div className="assignment-card-top">
 
 
-                          <span
-                            className={`priority-badge ${item.priority.toLowerCase()}`}
-                          >
+                    <div>
 
-                            {item.priority}
+                      <h2>
 
-                          </span>
+                        {item.title}
 
-
-
-                          <h2>
-
-                            {item.title}
-
-                          </h2>
-
-                        </div>
-
-
-
-                        <button
-                          className="delete-btn"
-
-                          onClick={()=>
-                            deleteAssignment(
-                              item.id
-                            )
-                          }
-                        >
-
-                          <FaTrash />
-
-                        </button>
-
-                      </div>
-
-
-
-                      {/* META */}
-
-                      <div className="assignment-meta">
-
-
-                        <span>
-
-                          <FaBook />
-
-                          {item.subject}
-
-                        </span>
-
-
-
-                        <span>
-
-                          <FaClock />
-
-                          {item.hours} Hours
-
-                        </span>
-
-
-
-                        <span>
-
-                          <FaCalendarAlt />
-
-                          {item.deadline}
-
-                        </span>
-
-                      </div>
-
-
-
-                      {/* PROGRESS */}
-
-                      <div className="assignment-progress">
-
-
-                        <div className="assignment-progress-top">
-
-
-                          <span>
-
-                            Progress
-
-                          </span>
-
-
-
-                          <span>
-
-                            {item.progress}%
-
-                          </span>
-
-                        </div>
-
-
-
-                        <div className="progress-bar">
-
-
-                          <div
-                            className="progress-fill"
-
-                            style={{
-                              width:
-                              `${item.progress}%`
-                            }}
-                          />
-
-                        </div>
-
-                      </div>
-
-
-
-                      {/* ACTIONS */}
-
-                      <div className="assignment-actions">
-
-
-                        <button
-                          className="complete-btn"
-
-                          onClick={()=>
-                            toggleComplete(
-                              item
-                            )
-                          }
-                        >
-
-                          <FaCheckCircle />
-
-                          {
-                            item.completed
-
-                            ? 'Completed'
-
-                            : 'Mark Complete'
-                          }
-
-                        </button>
-
-
-
-                        <button
-                          className="complete-btn"
-
-                          onClick={()=>
-                            increaseProgress(
-                              item
-                            )
-                          }
-                        >
-
-                          <FaBolt />
-
-                          Increase Progress
-
-                        </button>
-
-                      </div>
+                      </h2>
 
                     </div>
-                  ))
-                }
 
-              </div>
-            )
-          }
 
-        </div>
 
+                    <span
+                      className={`priority-badge ${item.priority.toLowerCase()}`}
+                    >
 
+                      {item.priority}
 
-        {/* RIGHT PANEL */}
+                    </span>
 
-        <div className="assignment-side-panel">
+                  </div>
 
 
-          {/* STRESS */}
 
-          <div className="stress-card">
+                  <div className="assignment-meta">
 
 
-            <h3>
+                    <span>
 
-              🧠 Stress Meter
+                      <FaBook />
 
-            </h3>
+                      {item.subject}
 
+                    </span>
 
 
-            <p>
 
-              {stressLevel}
+                    <span>
 
-            </p>
+                      <FaClock />
 
+                      {item.hours} Hours
 
+                    </span>
 
-            <div className="stress-bar">
 
 
-              <div
-                className="stress-fill"
+                    <span>
 
-                style={{
-                  width:
+                      <FaCalendarAlt />
 
-                  urgentTasks >= 5
+                      {item.deadline}
 
-                  ? '95%'
+                    </span>
 
-                  : urgentTasks >= 3
+                  </div>
 
-                  ? '65%'
 
-                  : '30%'
-                }}
-              />
 
-            </div>
+                  <div className="assignment-progress">
 
-          </div>
 
+                    <div className="assignment-progress-top">
 
+                      <span>
 
-          {/* AI */}
+                        Progress
 
-          <div className="focus-recommendation">
+                      </span>
 
 
-            <h3>
 
-              ⚡ AI Focus Recommendation
+                      <span>
 
-            </h3>
+                        {
+                          Math.round(progress)
+                        }%
 
+                      </span>
 
+                    </div>
 
-            <p>
 
-              {
-                urgentTasks > 2
 
-                ? 'Complete high priority tasks first.'
+                    <div className="progress-bar">
 
-                : 'Your workload looks manageable.'
-              }
+                      <div
+                        className="progress-fill"
+                        style={{
+                          width:`${progress}%`
+                        }}
+                      />
 
-            </p>
+                    </div>
 
+                  </div>
 
 
-            <button>
 
-              Start Focus Session
+                  <div className="assignment-actions">
 
-            </button>
 
-          </div>
+                    <button
+                      className="complete-btn"
 
+                      onClick={()=>
+                        startFocus(item)
+                      }
+                    >
 
+                      Start Focus
 
-          {/* KANBAN */}
+                    </button>
 
-          <div className="kanban-section">
 
 
-            <h3>
+                    <button
+                      className="delete-btn"
+                      onClick={()=>
+                        deleteAssignment(item.id)
+                      }
+                    >
 
-              📌 Quick Board
+                      <FaTrash />
 
-            </h3>
+                    </button>
 
+                  </div>
 
-
-            <div className="kanban-grid">
-
-
-              <div className="kanban-card">
-
-                <h4>
-
-                  Pending
-
-                </h4>
-
-                <span>
-
-                  {
-                    assignments.filter(
-                      item => !item.completed
-                    ).length
-                  } Tasks
-
-                </span>
-
-              </div>
-
-
-
-              <div className="kanban-card">
-
-                <h4>
-
-                  Completed
-
-                </h4>
-
-                <span>
-
-                  {completedTasks} Tasks
-
-                </span>
-
-              </div>
-
-
-
-              <div className="kanban-card">
-
-                <h4>
-
-                  Urgent
-
-                </h4>
-
-                <span>
-
-                  {urgentTasks} Tasks
-
-                </span>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
+                </div>
+              )
+            })
+          )
+        }
 
       </div>
 

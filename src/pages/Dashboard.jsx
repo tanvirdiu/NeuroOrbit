@@ -3,6 +3,16 @@ import {
 }
 from 'react-router-dom'
 
+import {
+  useContext
+}
+from 'react'
+
+import {
+  AuthContext
+}
+from '../context/AuthContext'
+
 
 
 function Dashboard() {
@@ -13,6 +23,14 @@ function Dashboard() {
 
   const navigate =
   useNavigate()
+
+
+
+  /* ================= USER ================= */
+
+  const {
+    user
+  } = useContext(AuthContext)
 
 
 
@@ -72,7 +90,6 @@ function Dashboard() {
 
       icon:'📈'
     }
-
   ]
 
 
@@ -101,17 +118,96 @@ function Dashboard() {
 
 
 
-          <h1>
+          {/* ================= USER INFO ================= */}
 
-            {greeting},
+          <div className="dashboard-user-info">
 
-            <span>
 
-              Tanvir
 
-            </span>
+            {/* ===== USER AVATAR ===== */}
 
-          </h1>
+            <div className="dashboard-user-avatar">
+
+
+
+              {
+
+                user?.profile?.photo
+
+                ||
+
+                user?.firebaseUser?.photoURL
+
+                ?
+
+                <img
+
+                  src={
+
+                    user?.profile?.photo
+
+                    ||
+
+                    user?.firebaseUser?.photoURL
+                  }
+
+                  alt="User"
+                />
+
+                :
+
+                <span>
+
+                  {
+
+                    user?.profile?.name
+                    ?.charAt(0)
+                    ?.toUpperCase()
+
+                    ||
+
+                    user?.firebaseUser?.displayName
+                    ?.charAt(0)
+                    ?.toUpperCase()
+
+                    ||
+
+                    'U'
+                  }
+
+                </span>
+              }
+
+            </div>
+
+
+
+            {/* ===== GREETING ===== */}
+
+            <h1>
+
+              {greeting},
+
+              <span>
+
+                {
+
+                  user?.profile?.name
+
+                  ||
+
+                  user?.firebaseUser?.displayName
+
+                  ||
+
+                  'User'
+                }
+
+              </span>
+
+            </h1>
+
+          </div>
 
 
 

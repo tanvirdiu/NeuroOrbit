@@ -554,13 +554,28 @@ function DashboardLayout() {
 
 
               {
-                user?.photoURL
+
+                user?.profile?.photo
+
+                ||
+
+                user?.firebaseUser?.photoURL
 
                 ?
 
                 <img
-                  src={user.photoURL}
+
+                  src={
+
+                    user?.profile?.photo
+
+                    ||
+
+                    user?.firebaseUser?.photoURL
+                  }
+
                   alt="User"
+
                   className="topbar-user-image"
                 />
 
@@ -569,13 +584,20 @@ function DashboardLayout() {
                 <span>
 
                   {
-                    user?.displayName
+
+                    user?.profile?.name
                     ?.charAt(0)
                     ?.toUpperCase()
 
                     ||
 
-                    user?.email
+                    user?.firebaseUser?.displayName
+                    ?.charAt(0)
+                    ?.toUpperCase()
+
+                    ||
+
+                    user?.profile?.email
                     ?.charAt(0)
                     ?.toUpperCase()
 

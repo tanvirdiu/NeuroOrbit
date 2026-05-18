@@ -6,6 +6,22 @@ import {
 from 'react'
 
 import {
+  useLocation
+}
+from 'react-router-dom'
+
+import {
+  doc,
+  updateDoc
+}
+from 'firebase/firestore'
+
+import {
+  db
+}
+from '../firebase/firebase'
+
+import {
   FaBrain,
   FaBolt,
   FaClock,
@@ -32,7 +48,17 @@ from '../assets/audio/night.mp3'
 
 
 
-function Focus() {
+function Focus(){
+
+
+
+  /* ================= LOCATION ================= */
+
+  const location =
+  useLocation()
+
+  const assignment =
+  location.state?.assignment
 
 
 
@@ -46,6 +72,9 @@ function Focus() {
 
   const [isRunning,setIsRunning] =
   useState(false)
+
+  const [focusedSeconds,setFocusedSeconds] =
+  useState(0)
 
 
 
@@ -136,11 +165,86 @@ function Focus() {
 
     if(isRunning){
 
-      timer = setInterval(()=>{
+      timer = setInterval(async()=>{
+
+
+
+        const updatedSeconds =
+        focusedSeconds + 1
+
+
+
+        setFocusedSeconds(updatedSeconds)
+
+
+
+        /* ================= REALTIME FIRESTORE UPDATE ================= */
+
+        if(
+
+          assignment &&
+
+          updatedSeconds % 60 === 0
+
+        ){
+
+          try{
+
+            const previousMinutes =
+
+              assignment.focusedMinutes || 0
+
+
+
+            const newMinutes =
+
+              previousMinutes + 1
+
+
+
+            const totalNeed =
+
+              assignment.hours * 60
+
+
+
+            const completed =
+
+              newMinutes >= totalNeed
+
+
+
+            await updateDoc(
+
+              doc(
+                db,
+                'assignments',
+                assignment.id
+              ),
+
+              {
+
+                focusedMinutes:
+                newMinutes,
+
+                completed
+              }
+            )
+          }
+
+          catch(error){
+
+            console.log(error)
+          }
+        }
+
+
+
+        /* ================= TIMER ================= */
 
         if(seconds > 0){
 
-          setSeconds(seconds - 1)
+          setSeconds(prev => prev - 1)
         }
 
         else{
@@ -154,7 +258,7 @@ function Focus() {
 
           else{
 
-            setMinutes(minutes - 1)
+            setMinutes(prev => prev - 1)
 
             setSeconds(59)
           }
@@ -163,9 +267,15 @@ function Focus() {
       },1000)
     }
 
-    return ()=> clearInterval(timer)
+    return ()=>clearInterval(timer)
 
-  },[isRunning,seconds,minutes])
+  },[
+    isRunning,
+    seconds,
+    minutes,
+    focusedSeconds,
+    assignment
+  ])
 
 
 
@@ -192,6 +302,8 @@ function Focus() {
     setSeconds(0)
 
     setIsRunning(false)
+
+    setFocusedSeconds(0)
   }
 
 
@@ -215,6 +327,8 @@ function Focus() {
       setSeconds(0)
 
       setIsRunning(false)
+
+      setFocusedSeconds(0)
     }
   }
 
@@ -229,6 +343,8 @@ function Focus() {
     setSeconds(0)
 
     setIsRunning(false)
+
+    setFocusedSeconds(0)
   }
 
 
@@ -302,7 +418,7 @@ function Focus() {
 
 
 
-  return (
+  return(
 
     <div className="focus-page">
 
@@ -334,6 +450,35 @@ function Focus() {
             work session.
 
           </p>
+
+
+
+          {
+            assignment && (
+
+              <div
+                style={{
+                  marginTop:'20px'
+                }}
+              >
+
+                <h3>
+
+                  Current Assignment:
+
+                </h3>
+
+
+
+                <p>
+
+                  {assignment.title}
+
+                </p>
+
+              </div>
+            )
+          }
 
         </div>
 
@@ -644,13 +789,17 @@ function Focus() {
 
               <h3>
 
-                Distractions
+                Focused Time
 
               </h3>
 
               <h1>
 
-                2
+                {
+                  Math.floor(
+                    focusedSeconds / 60
+                  )
+                }m
 
               </h1>
 
@@ -879,8 +1028,6 @@ function Focus() {
 
 
               <div className="wave-animation">
-
-
 
                 <span></span>
                 <span></span>

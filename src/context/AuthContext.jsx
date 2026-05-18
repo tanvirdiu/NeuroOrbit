@@ -11,7 +11,17 @@ import {
 from 'firebase/auth'
 
 import {
-  auth
+
+  doc,
+  getDoc,
+  setDoc
+
+}
+from 'firebase/firestore'
+
+import {
+  auth,
+  db
 }
 from '../firebase/firebase'
 
@@ -47,11 +57,151 @@ function AuthProvider({
 
       auth,
 
-      (currentUser) => {
+      async (currentUser) => {
 
-        setUser(currentUser)
+        try{
 
-        setLoading(false)
+
+
+          /* ================= NO USER ================= */
+
+          if(!currentUser){
+
+            setUser(null)
+
+            setLoading(false)
+
+            return
+          }
+
+
+
+          /* ================= USER REF ================= */
+
+          const userRef = doc(
+
+            db,
+            'users',
+            currentUser.uid
+          )
+
+
+
+          const userSnap =
+          await getDoc(userRef)
+
+
+
+          /* ================= DEFAULT DATA ================= */
+
+          const defaultData = {
+
+            uid:
+            currentUser.uid,
+
+            name:
+            currentUser.displayName
+            || 'User',
+
+            email:
+            currentUser.email
+            || '',
+
+            photo:
+            currentUser.photoURL
+            || '',
+
+            bio:
+            'AI Powered Productivity Explorer',
+
+            university:'',
+            github:'',
+            linkedin:'',
+            location:''
+          }
+
+
+
+          /* ================= CREATE USER ================= */
+
+          if(!userSnap.exists()){
+
+            await setDoc(
+
+              userRef,
+
+              defaultData
+            )
+
+
+
+            setUser({
+
+              firebaseUser:
+              currentUser,
+
+              profile:
+              defaultData
+            })
+          }
+
+
+
+          /* ================= EXISTING USER ================= */
+
+          else{
+
+            const profileData =
+            userSnap.data()
+
+
+
+            /* ================= FINAL FIX ================= */
+
+            setUser({
+
+              firebaseUser:
+              currentUser,
+
+              profile:
+              {
+
+                ...profileData,
+
+
+
+                /* ===== FIRESTORE PHOTO PRIORITY ===== */
+
+                photo:
+
+                profileData.photo
+
+                ?
+
+                profileData.photo
+
+                :
+
+                currentUser.photoURL
+
+                ||
+
+                ''
+              }
+            })
+          }
+
+        }
+
+        catch(error){
+
+          console.log(error)
+        }
+
+        finally{
+
+          setLoading(false)
+        }
       }
     )
 

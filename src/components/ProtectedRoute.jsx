@@ -19,41 +19,36 @@ function ProtectedRoute({
   children
 }) {
 
+
+
   const {
     user,
     loading
-  } = useContext(AuthContext)
+  }
+  =
+  useContext(AuthContext)
 
 
 
-  /* ================= LOADING ================= */
+  /* ================= LOADING SCREEN ================= */
 
   if(loading){
 
     return(
 
-      <div
-        style={{
+      <div className="auth-loader">
 
-          minHeight:'100vh',
 
-          display:'flex',
 
-          justifyContent:'center',
+        <div className="auth-spinner"></div>
 
-          alignItems:'center',
 
-          background:'#0b1120',
 
-          color:'white',
+        <h2>
 
-          fontSize:'24px',
+          Loading NeuroOrbit...
 
-          fontWeight:'700'
-        }}
-      >
-
-        Loading...
+        </h2>
 
       </div>
     )

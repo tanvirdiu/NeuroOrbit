@@ -825,3 +825,163 @@ body.dark .stress-bar {
         padding: 24px;
     }
 }
+
+
+/* =========================
+   UPDATED JSX SUPPORT
+========================= */
+
+.assignment-loading {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+body.dark .assignment-loading {
+    color: white;
+}
+
+
+/* =========================
+   ADD BUTTON INSIDE FORM
+========================= */
+
+.assignment-form .add-assignment-btn {
+    height: 66px;
+    border-radius: 20px;
+    font-size: 1rem;
+}
+
+
+/* =========================
+   EMPTY ASSIGNMENTS
+========================= */
+
+.empty-assignments {
+    width: 100%;
+    background: white;
+    border-radius: 30px;
+    padding: 60px 30px;
+    text-align: center;
+    color: #64748b;
+    font-size: 1.1rem;
+    border: 1px solid rgba(0, 0, 0, .05);
+}
+
+body.dark .empty-assignments {
+    background: rgba(15, 23, 42, .82);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, .06);
+}
+
+
+/* =========================
+   PRIORITY COLORS
+========================= */
+
+.priority.High {
+    background: #ffe4ea;
+    color: #ff2f5b;
+}
+
+.priority.Medium {
+    background: #fff4d8;
+    color: #ff9800;
+}
+
+.priority.Low {
+    background: #dcfff0;
+    color: #00b96b;
+}
+
+
+/* =========================
+   SIMPLE PRIORITY BADGE
+========================= */
+
+.priority {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    height: 38px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: 700;
+}
+
+
+/* =========================
+   SIMPLE PROGRESS WRAPPER
+========================= */
+
+.progress-wrapper {
+    width: 100%;
+    height: 12px;
+    background: #edf2f7;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 18px 0;
+}
+
+body.dark .progress-wrapper {
+    background: rgba(255, 255, 255, .06);
+}
+
+.progress-wrapper .progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient( 135deg, #18c5ff, #6b5cff);
+}
+
+
+/* =========================
+   ACTION BUTTON FIX
+========================= */
+
+.assignment-actions button {
+    border: none;
+    cursor: pointer;
+    transition: .3s ease;
+}
+
+.assignment-actions button:hover {
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   RESPONSIVE FIX
+========================= */
+
+@media(max-width:1200px) {
+    .assignment-form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .assignment-form .add-assignment-btn {
+        grid-column: span 2;
+    }
+}
+
+@media(max-width:768px) {
+    .assignment-form {
+        grid-template-columns: 1fr;
+    }
+    .assignment-form .add-assignment-btn {
+        grid-column: span 1;
+    }
+    .assignment-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .assignment-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}

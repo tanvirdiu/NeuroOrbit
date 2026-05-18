@@ -27,9 +27,7 @@ import {
 from 'firebase/firestore'
 
 import {
-
   updateProfile
-
 }
 from 'firebase/auth'
 
@@ -45,17 +43,10 @@ import {
   FaFire,
   FaClock,
   FaRocket,
-  FaTrophy,
   FaEdit,
   FaCheckCircle,
   FaChartLine,
-  FaStar,
   FaUserAstronaut,
-  FaMoon,
-  FaCode,
-  FaDatabase,
-  FaPaintBrush,
-  FaLaptopCode,
   FaSave,
   FaMapMarkerAlt,
   FaGithub,
@@ -75,14 +66,19 @@ function Profile() {
   /* ================= CONTEXT ================= */
 
   const {
-    user
-  } = useContext(AuthContext)
+    user,
+    setUser
+  }
+  =
+  useContext(AuthContext)
 
 
 
   const {
     theme
-  } = useContext(ThemeContext)
+  }
+  =
+  useContext(ThemeContext)
 
 
 
@@ -92,6 +88,9 @@ function Profile() {
   useState(true)
 
   const [saving,setSaving] =
+  useState(false)
+
+  const [uploading,setUploading] =
   useState(false)
 
   const [success,setSuccess] =
@@ -124,7 +123,7 @@ function Profile() {
 
       try{
 
-        if(!user){
+        if(!user?.firebaseUser){
 
           setLoading(false)
 
@@ -137,7 +136,7 @@ function Profile() {
 
           db,
           'users',
-          user.uid
+          user.firebaseUser.uid
         )
 
 
@@ -147,7 +146,7 @@ function Profile() {
 
 
 
-        /* ===== USER EXISTS ===== */
+        /* ================= USER EXISTS ================= */
 
         if(docSnap.exists()){
 
@@ -159,64 +158,131 @@ function Profile() {
           setProfile({
 
             name:
+
             data.name
-            || user.displayName
-            || '',
+
+            ||
+
+            user?.firebaseUser?.displayName
+
+            ||
+
+            '',
+
+
 
             bio:
+
             data.bio
-            || 'AI Powered Productivity Explorer',
+
+            ||
+
+            'AI Powered Productivity Explorer',
+
+
 
             university:
+
             data.university
-            || '',
+
+            ||
+
+            '',
+
+
 
             github:
+
             data.github
-            || '',
+
+            ||
+
+            '',
+
+
 
             linkedin:
+
             data.linkedin
-            || '',
+
+            ||
+
+            '',
+
+
 
             location:
+
             data.location
-            || '',
+
+            ||
+
+            '',
+
+
 
             photo:
+
             data.photo
-            || user.photoURL
-            || ''
+
+            ||
+
+            user?.firebaseUser?.photoURL
+
+            ||
+
+            ''
           })
         }
 
 
 
-        /* ===== CREATE NEW USER ===== */
+        /* ================= CREATE USER ================= */
 
         else{
 
           const defaultData = {
 
             name:
-            user.displayName
-            || '',
+
+            user?.firebaseUser?.displayName
+
+            ||
+
+            'User',
+
+
 
             email:
-            user.email
-            || '',
+
+            user?.firebaseUser?.email
+
+            ||
+
+            '',
+
+
 
             bio:
+
             'AI Powered Productivity Explorer',
+
+
 
             university:'',
             github:'',
             linkedin:'',
             location:'',
 
+
+
             photo:
-            user.photoURL
-            || ''
+
+            user?.firebaseUser?.photoURL
+
+            ||
+
+            ''
           }
 
 
@@ -271,7 +337,245 @@ function Profile() {
 
 
 
-  /* ================= SAVE ================= */
+/* ================= CLOUDINARY IMAGE UPLOAD ================= */
+
+const handleImageUpload =
+async (e) => {
+
+  try{
+
+    const file =
+    e.target.files[0]
+
+
+
+    if(!file){
+
+      return
+    }
+
+
+
+    /* ================= FILE VALIDATION ================= */
+
+    if(
+
+      !file.type.startsWith(
+        'image/'
+      )
+    ){
+
+      setError(
+        'Please upload an image file'
+      )
+
+      return
+    }
+
+
+
+    /* ================= MAX SIZE ================= */
+
+    if(file.size > 5000000){
+
+      setError(
+        'Image size must be under 5MB'
+      )
+
+      return
+    }
+
+
+
+    setUploading(true)
+
+    setError('')
+
+    setSuccess('')
+
+
+
+    const formData =
+    new FormData()
+
+
+
+    formData.append(
+      'file',
+      file
+    )
+
+
+
+    formData.append(
+      'upload_preset',
+      'neuroorbit'
+    )
+
+
+
+    const response =
+    await fetch(
+
+      'https://api.cloudinary.com/v1_1/dbw95ecca/image/upload',
+
+      {
+
+        method:'POST',
+
+        body:formData
+      }
+    )
+
+
+
+    const data =
+await response.json()
+
+
+
+console.log(data)
+
+
+
+
+
+
+
+    /* ================= UPLOAD FAILED ================= */
+
+    if(!response.ok){
+
+      setError(
+
+        data.error?.message
+
+        ||
+
+        'Image upload failed'
+      )
+
+      return
+    }
+
+
+
+    /* ================= NO IMAGE ================= */
+
+    if(!data.secure_url){
+
+      setError(
+        'Failed to get image URL'
+      )
+
+      return
+    }
+
+
+
+    /* ================= UPDATE PROFILE ================= */
+
+    /* ================= UPDATE PROFILE ================= */
+
+const updatedProfile = {
+
+  ...profile,
+
+  photo:data.secure_url
+}
+
+
+
+/* ================= LOCAL STATE ================= */
+
+setProfile(updatedProfile)
+
+
+
+/* ================= SAVE FIRESTORE ================= */
+
+await setDoc(
+
+  doc(
+    db,
+    'users',
+    user.firebaseUser.uid
+  ),
+
+  updatedProfile,
+
+  {
+    merge:true
+  }
+)
+
+
+
+/* ================= REALTIME UPDATE ================= */
+
+setUser({
+
+  ...user,
+
+  firebaseUser:{
+
+    ...user.firebaseUser,
+
+    photoURL:data.secure_url
+  },
+
+  profile:updatedProfile
+})
+
+
+
+    /* ================= REALTIME UPDATE ================= */
+
+    setUser({
+
+      ...user,
+
+      firebaseUser:{
+
+        ...user.firebaseUser,
+
+        photoURL:data.secure_url
+      }
+    })
+
+
+
+    setSuccess(
+      'Photo uploaded successfully'
+    )
+
+  }
+
+  catch(error){
+
+    console.log(error)
+
+
+
+    setError(
+
+      error.message
+
+      ||
+
+      'Failed to upload image'
+    )
+  }
+
+  finally{
+
+    setUploading(false)
+  }
+}
+
+
+
+  /* ================= SAVE PROFILE ================= */
 
   const handleSave = async () => {
 
@@ -289,7 +593,7 @@ function Profile() {
 
         db,
         'users',
-        user.uid
+        user.firebaseUser.uid
       )
 
 
@@ -299,12 +603,12 @@ function Profile() {
         ...profile,
 
         email:
-        user.email
+        user?.firebaseUser?.email
       }
 
 
 
-      /* ===== SAVE FIRESTORE ===== */
+      /* ================= SAVE FIRESTORE ================= */
 
       await setDoc(
 
@@ -319,27 +623,66 @@ function Profile() {
 
 
 
-      /* ===== UPDATE AUTH ===== */
+      /* ================= UPDATE FIREBASE AUTH ================= */
 
-      await updateProfile(
+      try{
 
-        user,
+        await updateProfile(
 
+          user.firebaseUser,
+
+          {
+
+            displayName:
+            profile.name,
+
+            photoURL:
+            profile.photo
+          }
+        )
+
+      }
+
+      catch(authError){
+
+        console.log(
+
+          'Firebase Auth Update Error:',
+
+          authError
+        )
+      }
+
+
+
+      /* ================= LOCAL PROFILE STATE ================= */
+
+      setProfile({
+
+        ...updatedData
+      })
+
+
+
+      /* ================= REALTIME GLOBAL USER UPDATE ================= */
+
+      setUser({
+
+        firebaseUser:
         {
+
+          ...user.firebaseUser,
 
           displayName:
           profile.name,
 
           photoURL:
           profile.photo
-        }
-      )
+        },
 
-
-
-      /* ===== UPDATE UI ===== */
-
-      setProfile(updatedData)
+        profile:
+        updatedData
+      })
 
 
 
@@ -353,7 +696,14 @@ function Profile() {
 
       console.log(error)
 
+
+
       setError(
+
+        error.message
+
+        ||
+
         'Failed to update profile'
       )
     }
@@ -400,6 +750,7 @@ function Profile() {
       <section className="profile-hero">
 
 
+
         <div className="profile-left">
 
 
@@ -409,14 +760,19 @@ function Profile() {
           <div className="profile-avatar-wrapper">
 
 
+
             {
+
               profile.photo
 
               ?
 
               <img
+
                 src={profile.photo}
+
                 alt="Profile"
+
                 className="profile-avatar-image"
               />
 
@@ -425,15 +781,20 @@ function Profile() {
               <div className="profile-avatar">
 
                 {
+
                   profile.name
                   ?.charAt(0)
                   ?.toUpperCase()
 
                   ||
 
-                  user?.email
+                  user?.firebaseUser?.email
                   ?.charAt(0)
                   ?.toUpperCase()
+
+                  ||
+
+                  'U'
                 }
 
               </div>
@@ -441,11 +802,38 @@ function Profile() {
 
 
 
-            <div className="camera-badge">
+            {/* ================= CAMERA ================= */}
 
-              <FaCamera />
+            <label className="camera-badge">
 
-            </div>
+
+              {
+
+                uploading
+
+                ?
+
+                '...'
+
+                :
+
+                <FaCamera />
+              }
+
+
+
+              <input
+
+                type="file"
+
+                accept="image/*"
+
+                hidden
+
+                onChange={handleImageUpload}
+              />
+
+            </label>
 
           </div>
 
@@ -456,11 +844,20 @@ function Profile() {
           <div className="profile-info">
 
 
+
             <h1>
 
               {
+
                 profile.name
-                || 'NeuroOrbit User'
+
+                ||
+
+                user?.firebaseUser?.displayName
+
+                ||
+
+                'User'
               }
 
             </h1>
@@ -470,8 +867,12 @@ function Profile() {
             <p>
 
               {
+
                 profile.bio
-                || 'AI Productivity Explorer'
+
+                ||
+
+                'AI Productivity Explorer'
               }
 
             </p>
@@ -484,7 +885,10 @@ function Profile() {
 
               <span>
 
-                {user?.email}
+                {
+
+                  user?.firebaseUser?.email
+                }
 
               </span>
 
@@ -493,6 +897,7 @@ function Profile() {
 
 
             <div className="profile-tags">
+
 
 
               <span>
@@ -536,7 +941,9 @@ function Profile() {
         <div className="profile-right">
 
 
+
           <div className="xp-card">
+
 
 
             <h2>
@@ -572,6 +979,7 @@ function Profile() {
       {/* ================= STATS ================= */}
 
       <section className="profile-stats">
+
 
 
         <div className="stat-card">
@@ -630,9 +1038,8 @@ function Profile() {
 
 
 
-        {/* ================= FORM ================= */}
-
         <div className="profile-form-card">
+
 
 
           <div className="card-title">
@@ -640,7 +1047,9 @@ function Profile() {
             <FaEdit />
 
             <h2>
+
               Edit Profile
+
             </h2>
 
           </div>
@@ -673,12 +1082,12 @@ function Profile() {
 
 
 
-          {/* ================= NAME ================= */}
-
           <div className="input-group">
 
             <label>
+
               Full Name
+
             </label>
 
             <input
@@ -693,12 +1102,12 @@ function Profile() {
 
 
 
-          {/* ================= BIO ================= */}
-
           <div className="input-group">
 
             <label>
+
               Bio
+
             </label>
 
             <textarea
@@ -712,32 +1121,12 @@ function Profile() {
 
 
 
-          {/* ================= PHOTO ================= */}
-
           <div className="input-group">
 
             <label>
-              Profile Photo URL
-            </label>
 
-            <input
-              type="text"
-              name="photo"
-              value={profile.photo}
-              onChange={handleChange}
-              placeholder="Paste image url"
-            />
-
-          </div>
-
-
-
-          {/* ================= UNIVERSITY ================= */}
-
-          <div className="input-group">
-
-            <label>
               University
+
             </label>
 
             <input
@@ -751,8 +1140,6 @@ function Profile() {
           </div>
 
 
-
-          {/* ================= GITHUB ================= */}
 
           <div className="input-group">
 
@@ -776,8 +1163,6 @@ function Profile() {
 
 
 
-          {/* ================= LINKEDIN ================= */}
-
           <div className="input-group">
 
             <label>
@@ -799,8 +1184,6 @@ function Profile() {
           </div>
 
 
-
-          {/* ================= LOCATION ================= */}
 
           <div className="input-group">
 
@@ -824,8 +1207,6 @@ function Profile() {
 
 
 
-          {/* ================= SAVE BUTTON ================= */}
-
           <button
             className="save-btn"
             onClick={handleSave}
@@ -833,6 +1214,7 @@ function Profile() {
           >
 
             {
+
               saving
 
               ?
@@ -861,12 +1243,15 @@ function Profile() {
         <div className="ai-profile-card">
 
 
+
           <div className="card-title">
 
             <FaUserAstronaut />
 
             <h2>
+
               AI Personality
+
             </h2>
 
           </div>
@@ -876,11 +1261,15 @@ function Profile() {
           <div className="ai-box">
 
             <h3>
+
               Learning Type
+
             </h3>
 
             <p>
+
               Adaptive Deep Worker
+
             </p>
 
           </div>
@@ -890,11 +1279,15 @@ function Profile() {
           <div className="ai-box">
 
             <h3>
+
               Best Productivity Time
+
             </h3>
 
             <p>
+
               8 PM - 11 PM
+
             </p>
 
           </div>
@@ -904,11 +1297,15 @@ function Profile() {
           <div className="ai-box">
 
             <h3>
+
               Orbit Aura
+
             </h3>
 
             <p>
+
               Focused & Stable
+
             </p>
 
           </div>
@@ -918,12 +1315,16 @@ function Profile() {
           <div className="ai-box">
 
             <h3>
+
               AI Observation
+
             </h3>
 
             <p>
+
               Coding tasks complete faster
               than theoretical tasks.
+
             </p>
 
           </div>
@@ -933,188 +1334,16 @@ function Profile() {
           <div className="ai-box">
 
             <h3>
+
               Neural Sync
+
             </h3>
 
             <p>
+
               92% Stability Achieved
+
             </p>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-
-      {/* ================= SKILLS ================= */}
-
-      <section className="skills-section">
-
-
-        <div className="section-title">
-
-          <h2>
-            Skill Galaxy
-          </h2>
-
-        </div>
-
-
-
-        <div className="skills-grid">
-
-
-          <div className="skill-card">
-
-            <FaCode />
-
-            <h3>
-              React
-            </h3>
-
-            <div className="skill-bar">
-
-              <div
-                className="skill-fill"
-                style={{width:'90%'}}
-              ></div>
-
-            </div>
-
-          </div>
-
-
-
-          <div className="skill-card">
-
-            <FaDatabase />
-
-            <h3>
-              Firebase
-            </h3>
-
-            <div className="skill-bar">
-
-              <div
-                className="skill-fill"
-                style={{width:'82%'}}
-              ></div>
-
-            </div>
-
-          </div>
-
-
-
-          <div className="skill-card">
-
-            <FaPaintBrush />
-
-            <h3>
-              UI Design
-            </h3>
-
-            <div className="skill-bar">
-
-              <div
-                className="skill-fill"
-                style={{width:'88%'}}
-              ></div>
-
-            </div>
-
-          </div>
-
-
-
-          <div className="skill-card">
-
-            <FaLaptopCode />
-
-            <h3>
-              Problem Solving
-            </h3>
-
-            <div className="skill-bar">
-
-              <div
-                className="skill-fill"
-                style={{width:'85%'}}
-              ></div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-
-      {/* ================= ACHIEVEMENTS ================= */}
-
-      <section className="achievement-section">
-
-
-        <div className="section-title">
-
-          <h2>
-            Achievement Collection
-          </h2>
-
-        </div>
-
-
-
-        <div className="achievement-grid">
-
-
-          <div className="achievement-card">
-
-            <FaTrophy />
-
-            <h3>
-              Deep Work Master
-            </h3>
-
-          </div>
-
-
-
-          <div className="achievement-card">
-
-            <FaStar />
-
-            <h3>
-              Orbit Commander
-            </h3>
-
-          </div>
-
-
-
-          <div className="achievement-card">
-
-            <FaMoon />
-
-            <h3>
-              Night Strategist
-            </h3>
-
-          </div>
-
-
-
-          <div className="achievement-card">
-
-            <FaRocket />
-
-            <h3>
-              Productivity Hero
-            </h3>
 
           </div>
 

@@ -2,26 +2,49 @@ import logo from '../assets/logo.png'
 
 import {
   useState,
+  useContext,
   useEffect
-} from 'react'
+}
+from 'react'
 
 import {
   Link,
   useNavigate
-} from 'react-router-dom'
+}
+from 'react-router-dom'
 
 import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged
-} from 'firebase/auth'
+  signInWithEmailAndPassword
+}
+from 'firebase/auth'
 
 import {
   auth
-} from '../firebase/firebase'
+}
+from '../firebase/firebase'
+
+import {
+  AuthContext
+}
+from '../context/AuthContext'
 
 
 
 function Login() {
+
+
+
+  /* =========================
+     CONTEXT
+  ========================= */
+
+  const {
+    user,
+    loading:authLoading
+  }
+  =
+  useContext(AuthContext)
+
 
 
   /* =========================
@@ -52,29 +75,48 @@ function Login() {
 
 
   /* =========================
-     AUTO LOGIN CHECK
+     REDIRECT
   ========================= */
 
   useEffect(()=>{
 
-    const unsubscribe =
+    if(!authLoading && user){
 
-    onAuthStateChanged(
+      navigate(
 
-      auth,
+        '/dashboard',
 
-      (user)=>{
-
-        if(user){
-
-          navigate('/dashboard')
+        {
+          replace:true
         }
-      }
+      )
+    }
+
+  },[user,authLoading,navigate])
+
+
+
+  /* =========================
+     GLOBAL AUTH LOADING
+  ========================= */
+
+  if(authLoading){
+
+    return(
+
+      <div className="auth-loader">
+
+        <div className="auth-spinner"></div>
+
+        <h2>
+
+          Loading NeuroOrbit...
+
+        </h2>
+
+      </div>
     )
-
-    return ()=>unsubscribe()
-
-  },[])
+  }
 
 
 
@@ -102,7 +144,6 @@ function Login() {
         password
       )
 
-      navigate('/dashboard')
     }
 
     catch(err){
@@ -240,8 +281,6 @@ function Login() {
           >
 
 
-            {/* EMAIL */}
-
             <input
               type="email"
               placeholder="Email"
@@ -259,8 +298,6 @@ function Login() {
 
 
 
-            {/* PASSWORD */}
-
             <input
               type="password"
               placeholder="Password"
@@ -277,8 +314,6 @@ function Login() {
             />
 
 
-
-            {/* ERROR */}
 
             {
               error && (
@@ -300,8 +335,6 @@ function Login() {
 
 
 
-            {/* BUTTON */}
-
             <button
               className="auth-btn"
               type="submit"
@@ -321,8 +354,6 @@ function Login() {
           </form>
 
 
-
-          {/* FOOTER */}
 
           <div className="auth-footer">
 
